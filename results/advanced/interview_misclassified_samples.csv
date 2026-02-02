@@ -1,0 +1,16 @@
+filename,speaker_id,gender,age,actual,predicted,error_type
+39_CM27_3,39,M,27,0,1,False Positive
+41_CM71_2,41,M,71,0,1,False Positive
+56_CM23_3,56,M,23,0,1,False Positive
+27_CF63_4,27,F,63,0,1,False Positive
+08_CF42_2,8,F,42,0,1,False Positive
+09_CF56_3,9,F,56,0,1,False Positive
+01_CF56_1,1,F,56,0,1,False Positive
+30_CF62_3,30,F,62,0,1,False Positive
+24_PF56_2,24,F,56,1,0,False Negative
+11_PF34_4,11,F,34,1,0,False Negative
+27_PF26_3,27,F,26,1,0,False Negative
+62_PF56_3,62,F,56,1,0,False Negative
+43_PF53_4,43,F,53,1,0,False Negative
+19_PF43_2,19,F,43,1,0,False Negative
+29_PF42_3,29,F,42,1,0,False Negative

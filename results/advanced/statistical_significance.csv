@@ -1,0 +1,2 @@
+comparison,reading_acc,interview_acc,difference,z_statistic,p_value,significant
+Reading vs Interview,0.7232142857142857,0.8706896551724138,0.1474753694581281,2.774024628046694,0.005536748649838108,True

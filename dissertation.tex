@@ -1,0 +1,110 @@
+% Dissertation: Identifying Depression Through Speech
+% University of Glasgow - Level 4 Computer Science
+% Author: Nile
+% 
+\documentclass{l4proj}
+
+% Additional packages
+\usepackage{pdfpages}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+% Set graphics path
+\graphicspath{{figures/}{figures/advanced/}}
+
+\begin{document}
+
+%==============================================================================
+% METADATA
+%==============================================================================
+\title{Identifying Depression Through Speech: A Comparative Analysis of Acoustic Features in Read and Spontaneous Speech}
+\author{Nile}
+\date{\today}
+
+\maketitle
+
+%==============================================================================
+% ABSTRACT
+%==============================================================================
+\begin{abstract}
+Depression is a leading cause of disability worldwide, yet diagnosis relies heavily on subjective self-report and clinical observation. Speech-based biomarkers offer a promising avenue for objective, non-invasive assessment. While recent research has achieved high classification accuracy using deep learning approaches, the resulting models often lack interpretability, limiting their clinical utility.
+
+This project investigated which acoustic features of speech are most predictive of depression, with particular focus on comparing read versus spontaneous speech modalities. Using the ANDROIDS corpus (228 recordings from 118 speakers with clinical diagnoses), 88 acoustic features from the eGeMAPS standard set were extracted and analysed using Support Vector Machine and Random Forest classifiers.
+
+Results demonstrated that spontaneous interview speech (87.1\% accuracy) significantly outperformed reading tasks (72.3\% accuracy, p = 0.0055) for depression detection. Critically, the most predictive features differed between tasks: reading speech was characterised by spectral slope and MFCC features, while interview speech was dominated by variability measures—particularly spectral flux variability, voice quality dynamics, and pause characteristics.
+
+These findings suggest that the ``flat'' or ``monotonous'' quality of depressed speech reflects reduced dynamic modulation rather than altered mean acoustic properties. The prominence of pause-related features for spontaneous speech aligns with known psychomotor retardation in depression. This work demonstrates that interpretable traditional methods can achieve competitive performance while providing clinically meaningful insights into how depression manifests in speech.
+\end{abstract}
+
+%==============================================================================
+% ACKNOWLEDGEMENTS
+%==============================================================================
+\chapter*{Acknowledgements}
+% Add acknowledgements here
+%
+% Thank you to my supervisor for their guidance throughout this project.
+% Thanks also to the creators of the ANDROIDS corpus for making their data publicly available.
+%
+
+%==============================================================================
+% EDUCATIONAL CONSENT (optional - uncomment to sign)
+%==============================================================================
+%\def\consentname {Nile} % your full name
+%\def\consentdate {\today} % the date you agree
+%
+\educationalconsent
+
+%==============================================================================
+\tableofcontents
+
+%==============================================================================
+% CHAPTERS
+%==============================================================================
+
+% Note: Each chapter file begins with \chapter{...}
+% The \pagenumbering{arabic} command is added after the first \chapter
+
+\input{drafts/sections/01_introduction}
+% Add page numbering reset after first chapter heading
+% (This is handled in 01_introduction.tex)
+
+\input{drafts/sections/02_background}
+
+\input{drafts/sections/03_methodology}
+
+\input{drafts/sections/04_implementation}
+
+\input{drafts/sections/05_results}
+
+\input{drafts/sections/06_discussion}
+
+\input{drafts/sections/07_conclusion}
+
+%==============================================================================
+% BIBLIOGRAPHY
+%==============================================================================
+\bibliographystyle{ieeetr}
+\bibliography{references/dissertation}
+
+%==============================================================================
+% APPENDICES (optional)
+%==============================================================================
+\appendix
+
+\chapter{Feature List}
+The complete list of 88 eGeMAPS features used in this study is available in the project repository.
+
+\chapter{Code Repository}
+All code for this project is available at: \url{https://github.com/NileC03/dissertation}
+
+The repository includes:
+\begin{itemize}
+    \item \texttt{scripts/extract\_features.py} — Feature extraction pipeline
+    \item \texttt{scripts/run\_analysis.py} — Classification and importance analysis
+    \item \texttt{scripts/advanced\_analysis.py} — Confusion matrices, significance tests, and visualisations
+\end{itemize}
+
+\end{document}

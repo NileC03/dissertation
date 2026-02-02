@@ -9,28 +9,67 @@
 | Reading | SVM | 71.5% ± 6.8% | 0.73 |
 | Reading | Random Forest | 72.3% ± 7.2% | 0.74 |
 | Interview | SVM | 82.0% ± 5.2% | 0.85 |
-| Interview | Random Forest | **87.0%** ± 4.8% | **0.88** |
+| Interview | Random Forest | **87.1%** ± 4.8% | **0.88** |
 
 ### Key Finding: Interview Outperforms Reading
 
 The most striking result is the **~15 percentage point** performance gap between tasks:
 
 - **Reading task:** 71.5–72.3% accuracy
-- **Interview task:** 82.0–87.0% accuracy
+- **Interview task:** 82.0–87.1% accuracy
 
 This suggests spontaneous speech contains richer depression markers than controlled reading—likely because it captures a broader range of cognitive and emotional processes.
 
-### Classifier Comparison
+### Statistical Significance
 
-Random Forest marginally outperformed SVM:
-- Reading: RF 72.3% vs SVM 71.5% (+0.8%)
-- Interview: RF 87.0% vs SVM 82.0% (+5.0%)
+| Metric | Value |
+|--------|-------|
+| Reading accuracy | 72.3% |
+| Interview accuracy | 87.1% |
+| Difference | 14.8% |
+| Z-statistic | 2.774 |
+| **P-value** | **0.0055** |
 
-Larger advantage on interview data may reflect RF's ability to capture complex feature interactions in naturalistic speech.
+The p-value of 0.0055 is well below 0.05, meaning **interview speech is statistically significantly better than reading speech for depression detection**. This is not random chance.
 
 ---
 
-## 5.2 Feature Importance Analysis
+## 5.2 Confusion Matrix Analysis
+
+### Reading Task (Random Forest)
+
+|  | Predicted HC | Predicted PT |
+|--|--------------|--------------|
+| **Actual HC** | 36 | 18 |
+| **Actual PT** | 13 | 45 |
+
+- False Positives (HC → PT): 18 (33% of healthy controls)
+- False Negatives (PT → HC): 13 (22% of patients)
+- Slight bias toward predicting depression
+
+### Interview Task (Random Forest)
+
+|  | Predicted HC | Predicted PT |
+|--|--------------|--------------|
+| **Actual HC** | 44 | 8 |
+| **Actual PT** | 7 | 57 |
+
+- False Positives: 8 (15% of healthy controls)
+- False Negatives: 7 (11% of patients)
+- **Much cleaner!** Errors balanced and substantially fewer overall
+
+### Detailed Metrics
+
+| Task | Class | Precision | Recall | F1 |
+|------|-------|-----------|--------|-----|
+| Reading | Healthy | 0.73 | 0.67 | 0.70 |
+| Reading | Depressed | 0.71 | 0.78 | 0.74 |
+| Interview | Healthy | 0.86 | 0.85 | 0.85 |
+| Interview | Depressed | 0.88 | 0.89 | 0.88 |
+
+---
+
+## 5.3 Feature Importance Analysis
 
 ### Reading Task Top 10 Features
 
@@ -49,10 +88,8 @@ Larger advantage on interview data may reflect RF's ability to capture complex f
 
 **Interpretation - Reading Task:**
 
-- **Spectral Slope Features:** Top feature (slopeUV0-500) measures spectral tilt in unvoiced regions. Reflects energy distribution—flatter slopes indicate breathier, less energetic voice. Consistent with reduced vocal effort in depression.
-
+- **Spectral Slope:** Top feature measures spectral tilt—flatter slopes indicate breathier, less energetic voice. Consistent with reduced vocal effort in depression.
 - **MFCC1:** Captures overall spectral envelope shape. Both mean and variability in top 10 → depressed speech shows altered spectral characteristics.
-
 - **Temporal Features:** Loudness peaks/sec and voiced segment variability indicate rhythm and prosodic differences.
 
 ---
@@ -74,21 +111,16 @@ Larger advantage on interview data may reflect RF's ability to capture complex f
 
 **Interpretation - Interview Task:**
 
-- **Spectral Flux Variability:** Most important feature! Measures frame-to-frame spectral change variability. Reduced variability → monotonous speech characteristic of depression.
-
-- **Voice Quality Measures:** Hammarberg index and alpha ratio reflect breathiness and vocal strain. Their *variability* is key—dynamic voice quality changes during speech are informative.
-
-- **Pausing Behaviour:** Mean and stddev of unvoiced segment length (pauses/hesitations). Clinically meaningful: depression associated with psychomotor retardation, altered speech timing.
-
-- **Loudness Dynamics:** Variability of loudness slopes indicates prosodic expression. Reduced modulation = flat affect.
+- **Spectral Flux Variability:** Most important feature! Measures frame-to-frame spectral change variability. Reduced variability → monotonous speech.
+- **Voice Quality Measures:** Hammarberg index and alpha ratio reflect breathiness and vocal strain. Their *variability* is key.
+- **Pausing Behaviour:** Mean and stddev of unvoiced segment length (pauses/hesitations). Clinically meaningful: depression = psychomotor retardation.
+- **Loudness Dynamics:** Variability of loudness slopes = prosodic expression. Reduced modulation = flat affect.
 
 ---
 
-## 5.3 Task Comparison
+## 5.4 Task Comparison
 
 ### Feature Overlap
-
-Comparing top 10 features reveals **limited overlap**:
 
 - **Shared:** Only mfcc1V (mean and variability)
 - **Overlap:** 2-3 features in both top-10 lists
@@ -117,32 +149,57 @@ Interview places greater demands on executive function, emotional regulation, la
 
 ---
 
-## 5.4 Visualisations
+## 5.5 Error Analysis
 
-Feature importance plots reveal:
+### Misclassification by Gender
 
-- Reading task: importance more evenly distributed across features
-- Interview task: steeper gradient—top feature (spectral flux variability) substantially more important than rest
+| Task | Female Errors | Male Errors |
+|------|---------------|-------------|
+| Reading | 23 | 8 |
+| Interview | 12 | 3 |
 
-*See: figures/reading_feature_importance.png, figures/interview_feature_importance.png*
+**Finding:** Female speakers more frequently misclassified in both tasks.
+
+Possible explanations:
+1. Sample imbalance in dataset
+2. Acoustic features may capture depression differently across genders
+3. Gender differences in depression expression
+
+**Implication:** Future work should consider gender-specific models.
+
+### Age Patterns
+
+Mean age of misclassified samples (~47.9 years) similar to dataset mean—age not a significant confounding factor.
 
 ---
 
-## 5.5 Statistical Significance
+## 5.6 Learning Curve Analysis
 
-Cross-validation standard deviations (~5-7%) indicate reasonably stable results. The **15-point gap** between tasks substantially exceeds uncertainty bounds → difference is genuine.
+Key observations:
+
+- **No severe overfitting:** Training and validation scores converge
+- **Potential for improvement:** Curves haven't fully plateaued—more data could help
+- **Interview learns faster:** Achieves higher validation scores with same training data
 
 ---
 
-## 5.6 Summary of Findings
+## 5.7 Summary of Findings
 
-1. **Interview speech is more informative:** 87% vs 72% accuracy
+1. **Interview speech is significantly more informative:** 87.1% vs 72.3% accuracy (p = 0.0055)
+
 2. **Different features matter for each task:**
    - Reading: Spectral slope, MFCC, rhythm
    - Interview: Spectral dynamics, pausing, voice quality variability
-3. **Variability measures are key for interview:** Most predictive features are *standard deviations*, not means
+
+3. **Variability measures are key for interview:** Most predictive features are *standard deviations*, not means—consistent with "flat" depressed speech
+
 4. **Pausing behaviour is highly informative:** Unvoiced segment features rank prominently
-5. **Both classifiers perform well:** Random Forest slightly better, especially on interview
+
+5. **Confusion matrices show balanced errors for interview:** Both false positives and false negatives are low
+
+6. **Gender bias in misclassification:** Female speakers more often misclassified—warrants investigation
+
+7. **No overfitting detected:** Learning curves show good generalisation
 
 These findings directly address the research question with interpretable insights into how depression manifests in speech.
 

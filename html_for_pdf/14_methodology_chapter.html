@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter 3: Methodology</title>
+    <style>
+        body { font-family: Georgia, serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+        h1 { color: #1a1a1a; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        h2 { color: #2a2a2a; margin-top: 30px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        h3 { color: #3a3a3a; margin-top: 20px; }
+        h4 { color: #4a4a4a; margin-top: 15px; font-style: italic; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background: #f5f5f5; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+        blockquote { border-left: 3px solid #ccc; margin-left: 0; padding-left: 20px; color: #555; }
+        .highlight { background: #ffffd0; padding: 2px 4px; }
+        ol, ul { margin-left: 20px; }
+        li { margin: 8px 0; }
+        hr { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+        .equation { background: #f9f9f9; padding: 15px; margin: 15px 0; text-align: center; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 3: Methodology</h1>
+
+<h2>3.1 Research Approach</h2>
+
+<p>This study adopts an empirical, quantitative approach to investigate which acoustic features of speech are most predictive of depression, with a particular focus on comparing read versus spontaneous speech modalities.</p>
+
+<p><strong>Experimental Design:</strong></p>
+
+<ol>
+    <li>Extract standardised acoustic features from speech recordings</li>
+    <li>Train classification models to distinguish depressed from healthy individuals</li>
+    <li>Analyse feature importance to identify the most predictive acoustic markers</li>
+    <li>Compare results across speech tasks (reading versus interview)</li>
+</ol>
+
+<p>This approach was chosen over deep learning methods specifically because the research question centres on <em>interpretability</em>—understanding which features contribute to depression detection—rather than maximising classification accuracy alone.</p>
+
+<hr>
+
+<h2>3.2 Dataset Selection</h2>
+
+<h3>The ANDROIDS Corpus</h3>
+
+<p>The ANDROIDS (ANDRoid corpus fOr Identification of Depression and Suicide risk) corpus was selected for this study. It contains speech recordings from 118 Italian speakers, comprising both individuals with clinical depression diagnoses and healthy controls.</p>
+
+<p><strong>Corpus Composition:</strong></p>
+
+<table>
+    <tr>
+        <th>Group</th>
+        <th>Reading Task</th>
+        <th>Interview Task</th>
+        <th>Total</th>
+    </tr>
+    <tr>
+        <td>Healthy Controls (HC)</td>
+        <td>54</td>
+        <td>52</td>
+        <td>106</td>
+    </tr>
+    <tr>
+        <td>Patients (PT)</td>
+        <td>58</td>
+        <td>64</td>
+        <td>122</td>
+    </tr>
+    <tr>
+        <td><strong>Total</strong></td>
+        <td>112</td>
+        <td>116</td>
+        <td>228</td>
+    </tr>
+</table>
+
+<p><strong>Why ANDROIDS?</strong></p>
+
+<ul>
+    <li><strong>Dual speech tasks:</strong> Both reading and interview recordings from same participants</li>
+    <li><strong>Clinical diagnoses:</strong> Depression labels based on psychiatric assessment, not self-report</li>
+    <li><strong>Public availability:</strong> Enables reproducibility</li>
+    <li><strong>Controlled recording:</strong> Minimises environmental acoustic variation</li>
+</ul>
+
+<h3>Speech Tasks</h3>
+
+<p><strong>Reading Task:</strong> Participants read a standardised Italian text aloud. Provides controlled linguistic content for pure acoustic analysis.</p>
+
+<p><strong>Interview Task:</strong> Semi-structured interviews on daily routines, emotions, and future plans. Elicits naturalistic speech with variable content.</p>
+
+<p>The inclusion of both tasks is central to the research question—the cognitive demands differ substantially, potentially interacting differently with depression-related speech patterns.</p>
+
+<h3>Ethical Considerations</h3>
+
+<p>The ANDROIDS corpus is publicly available for research. All recordings were collected with informed consent and are anonymised. No additional ethics approval required for this secondary analysis.</p>
+
+<hr>
+
+<h2>3.3 Feature Extraction</h2>
+
+<h3>The eGeMAPS Feature Set</h3>
+
+<p>Acoustic features were extracted using the <strong>extended Geneva Minimalistic Acoustic Parameter Set (eGeMAPS)</strong>—a standardised set designed for affective computing and clinical speech analysis.</p>
+
+<p><strong>Why eGeMAPS?</strong></p>
+
+<ol>
+    <li><strong>Standardisation:</strong> Enables comparison with published literature</li>
+    <li><strong>Interpretability:</strong> Features have clear acoustic/physiological meanings</li>
+    <li><strong>Comprehensiveness:</strong> Covers prosody, voice quality, spectral, and temporal domains</li>
+    <li><strong>Manageable dimensionality:</strong> 88 features—rich but not excessive</li>
+</ol>
+
+<h3>Feature Categories</h3>
+
+<table>
+    <tr>
+        <th>Category</th>
+        <th>Example Features</th>
+    </tr>
+    <tr>
+        <td>Frequency (F0)</td>
+        <td>Pitch mean, std dev, percentiles, slopes</td>
+    </tr>
+    <tr>
+        <td>Energy/Loudness</td>
+        <td>Mean loudness, peak rate, slopes</td>
+    </tr>
+    <tr>
+        <td>Spectral</td>
+        <td>MFCCs (1-4), spectral flux, formants</td>
+    </tr>
+    <tr>
+        <td>Voice Quality</td>
+        <td>Jitter, shimmer, Hammarberg index</td>
+    </tr>
+    <tr>
+        <td>Temporal</td>
+        <td>Voiced/unvoiced segment duration, speech rate</td>
+    </tr>
+</table>
+
+<h3>Extraction Process</h3>
+
+<p>Feature extraction used the <strong>openSMILE toolkit</strong> via Python bindings:</p>
+
+<ol>
+    <li>Load WAV file (16-bit PCM)</li>
+    <li>Apply eGeMAPS configuration with functional statistics</li>
+    <li>Generate 88-dimensional feature vector per recording</li>
+    <li>Store features with metadata (speaker ID, condition, task)</li>
+</ol>
+
+<p>The "functionals" level computes statistical summaries (mean, std dev, percentiles) across the entire recording, producing fixed-length representation regardless of duration.</p>
+
+<hr>
+
+<h2>3.4 Classification Methods</h2>
+
+<p>Two algorithms were employed—both well-established for speech-based depression detection.</p>
+
+<h3>Support Vector Machine (SVM)</h3>
+
+<p>SVMs find the hyperplane that maximally separates classes. An RBF (radial basis function) kernel captures nonlinear relationships.</p>
+
+<p><strong>Configuration:</strong></p>
+<ul>
+    <li>Kernel: RBF</li>
+    <li>Regularisation (C): 1.0</li>
+    <li>Feature standardisation: Yes (zero mean, unit variance)</li>
+</ul>
+
+<h3>Random Forest</h3>
+
+<p>Ensemble of 100 decision trees, each trained on bootstrap samples with random feature subsets. Averages predictions to reduce overfitting.</p>
+
+<p><strong>Configuration:</strong></p>
+<ul>
+    <li>Trees: 100</li>
+    <li>Maximum depth: 10 (prevents overfitting on small dataset)</li>
+    <li>Split criterion: Gini impurity</li>
+</ul>
+
+<hr>
+
+<h2>3.5 Evaluation Strategy</h2>
+
+<h3>Cross-Validation</h3>
+
+<p>All results use <strong>5-fold stratified cross-validation</strong>:</p>
+
+<ul>
+    <li>Stratification maintains class distribution in each fold</li>
+    <li>Each fold: train on 80%, test on held-out 20%</li>
+    <li>Report mean ± standard deviation across folds</li>
+</ul>
+
+<h3>Evaluation Metrics</h3>
+
+<p><strong>Accuracy:</strong> Proportion correctly classified</p>
+
+<p><strong>F1 Score:</strong> Harmonic mean of precision and recall—important given mild class imbalance</p>
+
+<h3>Feature Importance Analysis</h3>
+
+<p>Two complementary measures identify predictive features:</p>
+
+<p><strong>Gini Importance:</strong> Total decrease in node impurity across Random Forest trees. Efficient but can be biased.</p>
+
+<p><strong>Permutation Importance:</strong> Accuracy decrease when feature values are shuffled. More reliable estimate of true predictive value. Used 10 permutations per feature.</p>
+
+<hr>
+
+<h2>3.6 Reproducibility</h2>
+
+<p>All code available in project repository:</p>
+
+<ol>
+    <li><code>extract_features.py</code> — Feature extraction pipeline</li>
+    <li><code>run_analysis.py</code> — Classification and importance analysis</li>
+</ol>
+
+<p>Random seeds fixed for all stochastic processes.</p>
+
+<hr>
+
+<h2>3.7 Summary</h2>
+
+<p>This methodology enables systematic investigation through:</p>
+
+<ul>
+    <li>Carefully selected corpus with both speech modalities</li>
+    <li>Standardised, interpretable features (eGeMAPS)</li>
+    <li>Robust classification with established algorithms</li>
+    <li>Feature importance analysis for clinical interpretability</li>
+    <li>Rigorous cross-validation for reliable estimates</li>
+</ul>
+
+<hr>
+
+<p><em>Estimated length: 4-5 pages</em></p>
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+\chapter{Implementation}
+
+This chapter describes the technical implementation of the methodology outlined in Chapter 3. It covers the development environment, data processing pipeline, model training procedures, and analysis workflow.
+
+\section{Development Environment}
+
+\subsection{Hardware}
+
+All experiments were conducted on a personal computer with the following specifications:
+
+\begin{itemize}
+    \item \textbf{Processor:} Apple M1 / Intel Core (macOS system)
+    \item \textbf{Memory:} 8-16 GB RAM
+    \item \textbf{Storage:} SSD (sufficient for 4GB corpus + working files)
+\end{itemize}
+
+The computational requirements of this project are modest—traditional machine learning methods and feature extraction do not require GPU acceleration.
+
+\subsection{Software Stack}
+
+\begin{table}[h]
+\centering
+\caption{Software dependencies}
+\label{tab:software}
+\begin{tabular}{lll}
+\hline
+\textbf{Component} & \textbf{Version} & \textbf{Purpose} \\
+\hline
+Python & 3.11+ & Programming language \\
+openSMILE & 2.5.0 & Acoustic feature extraction \\
+scikit-learn & 1.3+ & Machine learning algorithms \\
+pandas & 2.0+ & Data manipulation \\
+NumPy & 1.24+ & Numerical computing \\
+matplotlib & 3.7+ & Visualisation \\
+seaborn & 0.12+ & Statistical plots \\
+tqdm & 4.65+ & Progress bars \\
+\hline
+\end{tabular}
+\end{table}
+
+A virtual environment (\texttt{venv}) was used to isolate dependencies and ensure reproducibility.
+
+\section{Data Processing Pipeline}
+
+\subsection{Corpus Organisation}
+
+The ANDROIDS corpus was organised hierarchically:
+
+\begin{verbatim}
+data/Androids-Corpus/
+├── Reading-Task/
+│   └── audio/
+│       ├── HC/     # Healthy controls (54 files)
+│       └── PT/     # Patients (58 files)
+└── Interview-Task/
+    └── audio/
+        ├── HC/     # Healthy controls (52 files)
+        └── PT/     # Patients (64 files)
+\end{verbatim}
+
+Each audio file follows the naming convention: \texttt{nn\_XGmm\_t.wav}, where:
+\begin{itemize}
+    \item \texttt{nn} — Speaker ID (two digits)
+    \item \texttt{X} — Condition (P = patient, C = control)
+    \item \texttt{G} — Gender (M = male, F = female)
+    \item \texttt{mm} — Age (two digits)
+    \item \texttt{t} — Education level
+\end{itemize}
+
+\subsection{Feature Extraction Implementation}
+
+The feature extraction script (\texttt{extract\_features.py}) processes all audio files and generates feature matrices:
+
+\begin{verbatim}
+# Initialize OpenSMILE with eGeMAPS
+smile = opensmile.Smile(
+    feature_set=opensmile.FeatureSet.eGeMAPSv02,
+    feature_level=opensmile.FeatureLevel.Functionals,
+)
+
+# Extract features from each file
+for wav_path in audio_files:
+    features = smile.process_file(str(wav_path))
+    # Parse metadata from filename
+    # Append to feature matrix
+\end{verbatim}
+
+The script:
+\begin{enumerate}
+    \item Iterates through all WAV files in the corpus
+    \item Extracts 88 eGeMAPS features per recording
+    \item Parses metadata from filenames (speaker ID, condition, demographics)
+    \item Combines features and metadata into a single DataFrame
+    \item Saves results in CSV and pickle formats
+\end{enumerate}
+
+\subsubsection{Output Files}
+
+\begin{itemize}
+    \item \texttt{all\_features.csv} — Complete feature matrix (228 samples × 97 columns)
+    \item \texttt{reading\_features.csv} — Reading task subset (112 samples)
+    \item \texttt{interview\_features.csv} — Interview task subset (116 samples)
+    \item \texttt{all\_features.pkl} — Binary format for faster loading
+\end{itemize}
+
+\section{Model Training Implementation}
+
+\subsection{Data Preparation}
+
+Before training, features are separated from metadata:
+
+\begin{verbatim}
+metadata_cols = ['filename', 'speaker_id', 'condition',
+                 'gender', 'age', 'education', 'label',
+                 'task', 'depression']
+feature_cols = [c for c in df.columns if c not in metadata_cols]
+
+X = task_df[feature_cols].values  # Shape: (n_samples, 88)
+y = task_df['depression'].values  # Shape: (n_samples,)
+\end{verbatim}
+
+\subsection{Cross-Validation Setup}
+
+Stratified 5-fold cross-validation ensures class balance in each split:
+
+\begin{verbatim}
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+\end{verbatim}
+
+The fixed random seed ensures reproducibility—the same folds are generated on each run.
+
+\subsection{SVM Training}
+
+The SVM classifier uses a scikit-learn Pipeline to combine feature scaling with classification:
+
+\begin{verbatim}
+svm_pipe = Pipeline([
+    ('scaler', StandardScaler()),
+    ('svm', SVC(kernel='rbf', C=1.0, random_state=42))
+])
+
+svm_scores = cross_val_score(svm_pipe, X, y, cv=cv,
+                              scoring='accuracy')
+\end{verbatim}
+
+StandardScaler transforms features to zero mean and unit variance—essential for RBF kernel SVMs, which are sensitive to feature magnitudes.
+
+\subsection{Random Forest Training}
+
+Random Forest does not require feature scaling:
+
+\begin{verbatim}
+rf = RandomForestClassifier(
+    n_estimators=100,
+    random_state=42,
+    n_jobs=-1,
+    max_depth=10
+)
+
+rf_scores = cross_val_score(rf, X, y, cv=cv,
+                            scoring='accuracy')
+\end{verbatim}
+
+Key parameters:
+\begin{itemize}
+    \item \texttt{n\_estimators=100} — Sufficient trees for stable importance estimates
+    \item \texttt{max\_depth=10} — Prevents overfitting on small dataset
+    \item \texttt{n\_jobs=-1} — Utilises all CPU cores for parallel training
+\end{itemize}
+
+\section{Feature Importance Implementation}
+
+\subsection{Gini Importance}
+
+After training on the full dataset, Random Forest provides built-in feature importance:
+
+\begin{verbatim}
+rf.fit(X, y)
+
+rf_importance = pd.DataFrame({
+    'feature': feature_cols,
+    'importance': rf.feature_importances_
+}).sort_values('importance', ascending=False)
+\end{verbatim}
+
+Gini importance measures how much each feature contributes to reducing impurity across all decision tree splits.
+
+\subsection{Permutation Importance}
+
+For more robust importance estimates, permutation importance shuffles each feature and measures accuracy degradation:
+
+\begin{verbatim}
+perm_result = permutation_importance(
+    rf, X, y,
+    n_repeats=10,
+    random_state=42,
+    n_jobs=-1
+)
+
+perm_importance = pd.DataFrame({
+    'feature': feature_cols,
+    'importance': perm_result.importances_mean,
+    'std': perm_result.importances_std
+})
+\end{verbatim}
+
+Ten permutation repeats provide stable estimates with quantified uncertainty.
+
+\section{Visualisation Implementation}
+
+Feature importance plots were generated using matplotlib:
+
+\begin{verbatim}
+fig, ax = plt.subplots(figsize=(12, 8))
+top20 = perm_importance.head(20)
+
+bars = ax.barh(range(len(top20)), top20['importance'].values)
+ax.set_yticks(range(len(top20)))
+ax.set_yticklabels(top20['feature'].values)
+ax.invert_yaxis()  # Highest importance at top
+ax.set_xlabel('Permutation Importance')
+ax.set_title(f'Top 20 Features - {task.title()} Task')
+
+plt.savefig(f'figures/{task}_feature_importance.png', dpi=150)
+\end{verbatim}
+
+Horizontal bar charts facilitate reading long feature names. DPI of 150 balances file size and print quality.
+
+\section{Output Management}
+
+\subsection{Results Storage}
+
+All results are saved in structured directories:
+
+\begin{verbatim}
+results/
+├── summary.csv              # Overall accuracy comparison
+├── reading_gini_importance.csv
+├── reading_perm_importance.csv
+├── interview_gini_importance.csv
+└── interview_perm_importance.csv
+
+figures/
+├── reading_feature_importance.png
+└── interview_feature_importance.png
+\end{verbatim}
+
+\subsection{Version Control}
+
+Git tracks all code and configuration changes. Large binary files (audio corpus, compressed archives) are excluded via \texttt{.gitignore}:
+
+\begin{verbatim}
+# .gitignore
+data/Androids-Corpus/
+data/*.zip
+.venv/
+__pycache__/
+\end{verbatim}
+
+\section{Execution Workflow}
+
+The complete analysis can be reproduced with two commands:
+
+\begin{verbatim}
+# 1. Extract features (run once)
+python scripts/extract_features.py
+
+# 2. Run classification and importance analysis
+python scripts/run_analysis.py
+\end{verbatim}
+
+Feature extraction takes approximately 2-3 minutes for 228 audio files. Classification and importance analysis completes in under 1 minute.
+
+\section{Summary}
+
+The implementation follows software engineering best practices:
+
+\begin{itemize}
+    \item \textbf{Modularity:} Separate scripts for extraction and analysis
+    \item \textbf{Reproducibility:} Fixed random seeds, virtual environment, version control
+    \item \textbf{Efficiency:} Parallel processing where possible
+    \item \textbf{Documentation:} Clear variable names, inline comments
+\end{itemize}
+
+All code is available in the project repository, enabling full replication of results.

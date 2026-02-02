@@ -1,0 +1,130 @@
+\chapter{Discussion}
+
+This chapter interprets the experimental findings, situates them within the broader literature, acknowledges limitations, and identifies directions for future research.
+
+\section{Interpretation of Results}
+
+\subsection{Why Interview Speech Performs Better}
+
+The 15-percentage-point accuracy advantage of interview over reading speech is the study's most significant finding. Several factors likely contribute:
+
+\paragraph{Cognitive Load} Spontaneous speech requires concurrent planning, lexical retrieval, and articulation. Depression impairs executive function and processing speed, and these impairments may manifest more clearly when cognitive demands are high. Reading minimises these demands by providing the linguistic content.
+
+\paragraph{Emotional Engagement} Interview questions about daily life, emotions, and future plans elicit affective content. Depression is characterised by altered emotional processing, and this may be more apparent when discussing emotionally relevant topics than when reading neutral text.
+
+\paragraph{Pause Behaviour} The prominence of pause-related features (unvoiced segment duration) in interview speech reflects the cognitive processes of word-finding and response formulation. Depressed individuals often exhibit longer response latencies and more frequent pauses—patterns that cannot emerge in fluent reading.
+
+\paragraph{Natural Variability} Spontaneous speech permits greater variation in prosody, timing, and voice quality. This variability is itself informative: the importance of \textit{standard deviation} features for interview speech suggests that reduced dynamic range is a key depression marker.
+
+\subsection{The Importance of Variability Measures}
+
+A consistent finding is that variability measures (standard deviations) outperform means for interview speech. The top three interview features are all variability measures:
+
+\begin{enumerate}
+    \item Spectral flux variability
+    \item Hammarberg index variability
+    \item Unvoiced segment length variability
+\end{enumerate}
+
+This aligns with the clinical characterisation of depressed speech as ``flat'' or ``monotonous''—not necessarily different in average acoustic properties, but reduced in dynamic modulation. Interventions targeting speech variability (e.g., prosodic training) may have diagnostic or therapeutic relevance.
+
+\subsection{Clinical Implications}
+
+The feature importance results suggest potential biomarkers for depression detection systems:
+
+\paragraph{Voice Quality Indicators} The Hammarberg index and alpha ratio, which capture spectral balance and breathiness, are among the most predictive features for interview speech. Voice quality assessment could be incorporated into clinical interviews.
+
+\paragraph{Timing Analysis} Pause duration and variability are highly informative. Automated pause detection is technically straightforward and could be integrated into telehealth platforms.
+
+\paragraph{Task Selection} For speech-based screening, eliciting spontaneous speech (e.g., describing a typical day) appears more diagnostic than reading tasks. Clinical protocols might prioritise such tasks.
+
+\section{Comparison with Literature}
+
+\subsection{Alignment with Prior Work}
+
+The findings align with established literature on depressed speech:
+
+\paragraph{Reduced Prosodic Variation} Numerous studies report reduced pitch and loudness variation in depression. The importance of variability measures in this study corroborates these findings.
+
+\paragraph{Psychomotor Retardation} The prominence of pause-related features reflects psychomotor slowing, a core symptom of melancholic depression. This is consistent with Tao's finding that temporal features are predictive.
+
+\paragraph{Voice Quality Changes} Breathiness and reduced vocal intensity have been documented in depressed speech. The Hammarberg index captures these characteristics.
+
+\subsection{Novel Contributions}
+
+This study extends the literature in several ways:
+
+\paragraph{Direct Task Comparison} While previous studies have used different speech tasks, few have systematically compared the same participants across tasks. The 15-point accuracy difference quantifies the task selection effect.
+
+\paragraph{Feature Interpretability Focus} Most recent work prioritises classification accuracy using deep learning. This study demonstrates that interpretable traditional methods achieve competitive performance while providing clinical insight.
+
+\paragraph{Identification of Task-Specific Markers} The divergent feature profiles for reading versus interview speech suggest that different mechanisms underlie detection in each context.
+
+\subsection{Comparison with AVEC Challenges}
+
+The Audio/Visual Emotion Challenge (AVEC) series established benchmarks for speech-based depression detection. While direct comparison is complicated by different datasets, the 87\% accuracy on interview speech compares favourably with published AVEC results, which typically report 70--85\% accuracy depending on the evaluation metric.
+
+\section{Limitations}
+
+\subsection{Dataset Limitations}
+
+\paragraph{Sample Size} With 228 recordings from 118 speakers, the dataset is modest. Larger samples would enable more robust estimates and potentially reveal additional predictive features.
+
+\paragraph{Language Specificity} The ANDROIDS corpus contains Italian speech. Acoustic markers may differ across languages due to prosodic and phonetic differences. Replication with English or multilingual data is needed.
+
+\paragraph{Clinical Diversity} The corpus includes depressed patients generally, without stratification by severity or depression subtype. Different markers may characterise mild versus severe depression, or anhedonic versus anxious presentations.
+
+\paragraph{Cross-Sectional Design} Recordings capture a single time point. Longitudinal data could reveal how speech markers track symptom changes during treatment.
+
+\subsection{Methodological Limitations}
+
+\paragraph{Feature Set} The eGeMAPS set, while comprehensive, may not capture all relevant acoustic information. Alternative representations (e.g., spectrograms for deep learning, linguistic features) might improve performance.
+
+\paragraph{Classifier Selection} Only SVM and Random Forest were evaluated. Other methods (gradient boosting, neural networks with attention) might achieve better performance, though potentially at the cost of interpretability.
+
+\paragraph{No Speaker Normalisation} Features were extracted without speaker-level normalisation. Individual differences in baseline voice characteristics may confound depression detection. Speaker adaptation techniques could improve robustness.
+
+\paragraph{No Temporal Modelling} Features were aggregated over entire recordings. Time-varying models (e.g., LSTMs) could capture dynamics of speech over a conversation.
+
+\subsection{Generalisability Concerns}
+
+The findings apply to the specific recording conditions and population of the ANDROIDS corpus. Generalisability to:
+
+\begin{itemize}
+    \item Other languages
+    \item Different recording equipment/environments
+    \item Comorbid conditions (e.g., anxiety, psychosis)
+    \item Different age groups or genders
+\end{itemize}
+
+requires additional validation.
+
+\section{Future Work}
+
+\subsection{Methodological Extensions}
+
+\paragraph{SHAP Analysis} The planned SHAP (SHapley Additive exPlanations) analysis would provide individual-level feature explanations, showing which features drive predictions for specific recordings. This could identify depression subtypes with distinct acoustic profiles.
+
+\paragraph{Cross-Corpus Validation} Testing on additional corpora (e.g., DAIC-WOZ) would assess generalisability. Transfer learning approaches could adapt models trained on one dataset to another.
+
+\paragraph{Multimodal Integration} Combining acoustic features with linguistic analysis (word choice, sentiment, topic) or visual cues (facial expression) could improve detection rates.
+
+\subsection{Clinical Applications}
+
+\paragraph{Longitudinal Monitoring} Tracking speech markers over time could provide objective measures of treatment response, complementing self-report questionnaires.
+
+\paragraph{Screening Tools} Integration with telehealth platforms or smartphone apps could enable passive or active depression screening at scale.
+
+\paragraph{Personalised Baselines} Establishing individual baselines during healthy periods would enable detection of relative changes, potentially improving sensitivity to early or subtle symptoms.
+
+\subsection{Theoretical Investigations}
+
+\paragraph{Mechanism Understanding} The current study identifies predictive features but not underlying mechanisms. Controlled studies manipulating cognitive load or emotional content could clarify why certain features are informative.
+
+\paragraph{Depression Subtypes} Different depression presentations (melancholic, atypical, anxious) may have distinct acoustic signatures. Stratified analysis could reveal subtype-specific markers.
+
+\section{Summary}
+
+This study demonstrates that interpretable acoustic features can effectively detect depression in speech, with interview speech substantially outperforming reading tasks. The most predictive features are variability measures reflecting dynamic speech modulation, particularly spectral flux, voice quality, and pausing patterns.
+
+While limitations exist regarding sample size, language specificity, and generalisability, the findings provide clinically relevant insights and establish a foundation for speech-based depression assessment tools. Future work should validate these findings across diverse populations and explore integration into clinical workflows.

@@ -1,0 +1,254 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>02_glasgow_phd_thesis_summary</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; color: #333; }
+h1 { font-size: 28px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+h2 { font-size: 22px; color: #444; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+h3 { font-size: 18px; color: #555; }
+code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: Monaco, monospace; font-size: 13px; }
+pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #f0f0f0; font-weight: 600; }
+tr:nth-child(even) { background: #fafafa; }
+blockquote { border-left: 4px solid #ddd; margin: 0; padding-left: 20px; color: #666; font-style: italic; }
+hr { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+a { color: #0066cc; }
+strong { color: #111; }
+@media print { body { max-width: none; margin: 0; } }
+</style>
+</head><body><h1>Glasgow PhD Thesis Summary</h1>
+<h2>"Speech-based Automatic Depression Detection via Biomarkers Identification and AI Approaches"</h2>
+<p><strong>Author:</strong> Fuxiang Tao<br />
+<strong>Supervisor:</strong> Professor Alessandro Vinciarelli<br />
+<strong>Institution:</strong> University of Glasgow, School of Engineering<br />
+<strong>Date:</strong> August 2023 (submitted), 2024 (published)<br />
+<strong>Pages:</strong> 156<br />
+<strong>DOI:</strong> 10.5525/gla.thesis.84055<br />
+<strong>URL:</strong> https://theses.gla.ac.uk/84055/</p>
+<hr />
+<h2>Abstract Summary</h2>
+<p>Depression affects 300+ million people globally. Traditional diagnosis is time-consuming and depends on clinical experience. This thesis shows TWO ways to benefit from automatic detection:</p>
+<ol>
+<li><strong>Identifying speech markers</strong> (duration, pauses, correlation matrices)</li>
+<li><strong>Novel deep learning models</strong> (Multi-local Attention, Cross-Data Multilevel Attention)</li>
+</ol>
+<hr />
+<h2>Thesis Structure</h2>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Title</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Introduction</td>
+<td>Background, thesis statements, contributions</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Background</td>
+<td>Cognition in depression, speech production, automatic detection overview</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>The Androids Corpus</strong></td>
+<td>New publicly available dataset</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Speech Duration &amp; Silences</td>
+<td>Timing-based markers</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Feature Correlation Matrices</td>
+<td>Acoustic feature relationships</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Multi-local Attention</td>
+<td>Novel attention mechanism</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Cross-Data Multilevel Attention</td>
+<td>Combining read + spontaneous speech</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Conclusions</td>
+<td>Summary, limitations, future work</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>⭐ The ANDROIDS Corpus (Chapter 3)</h2>
+<p><strong>This is the dataset Nile mentioned exploring!</strong></p>
+<h3>Overview</h3>
+<ul>
+<li><strong>URL:</strong> https://github.com/androidscorpus/data</li>
+<li><strong>118 participants:</strong> 64 depressed, 54 controls</li>
+<li><strong>Labels:</strong> Given by professional psychiatrists (NOT self-report questionnaires)</li>
+<li><strong>Language:</strong> Italian</li>
+<li><strong>Setting:</strong> Mental health centers (in-the-wild, laptop microphone)</li>
+</ul>
+<h3>Tasks</h3>
+<ol>
+<li><strong>Reading Task (RT):</strong> Read "The Wind of the North and the Sun" (Aesop fable)</li>
+<li>Total: 1h 33m 49s</li>
+<li>
+<p>Average: 50.3 ± 10.3 seconds</p>
+</li>
+<li>
+<p><strong>Interview Task (IT):</strong> Answer questions about daily life</p>
+</li>
+<li>Total: 7h 24m 22s</li>
+<li>Average: 229.8 ± 86.6 seconds</li>
+</ol>
+<h3>Demographics</h3>
+<ul>
+<li><strong>Age:</strong> 47.3 ± 12.2 years (no significant difference between groups)</li>
+<li><strong>Gender:</strong> ~2.5:1 female:male ratio (consistent with epidemiology)</li>
+<li><strong>Education:</strong> Balanced between groups</li>
+<li><strong>110 participants</strong> have BOTH read and spontaneous speech</li>
+</ul>
+<h3>Depression Types in Corpus</h3>
+<ul>
+<li>22 major depressive disorder</li>
+<li>15 bipolar disorder (depressive phase)</li>
+<li>8 reactive depression</li>
+<li>7 endo-reactive depression</li>
+<li>5 anxiety-depressive disorder</li>
+<li>1 persistent depressive disorder</li>
+<li>6 unspecified</li>
+</ul>
+<h3>Advantages Over Other Datasets</h3>
+<ol>
+<li>Professional psychiatric diagnosis (not questionnaire scores)</li>
+<li>In-the-wild recording conditions</li>
+<li>Both read AND spontaneous speech from same speakers</li>
+<li>Matched demographics between groups</li>
+<li>Manual turn segmentation for conversations</li>
+<li>Reproducible experimental protocols</li>
+<li>Italian language (underrepresented)</li>
+</ol>
+<hr />
+<h2>Technical Methods</h2>
+<h3>Feature Extraction (OpenSMILE)</h3>
+<ul>
+<li><strong>Window:</strong> 25ms, <strong>Step:</strong> 10ms</li>
+<li><strong>16 base features:</strong></li>
+<li>Root Mean Square Energy (RMSE)</li>
+<li>MFCC 1-12 (12 features)</li>
+<li>Zero Crossing Rate (ZCR)</li>
+<li>Voicing Probability (VP)</li>
+<li>Fundamental Frequency (F0)</li>
+<li><strong>32 total features</strong> (16 + deltas)</li>
+</ul>
+<h3>Baseline Approaches</h3>
+<p><strong>1. SVM Baseline (BL_SVM)</strong>
+- Average feature vectors over recording
+- Linear kernel SVM</p>
+<p><strong>2. LSTM Baseline (BL_LSTM)</strong>
+- Segment into frames (M=128, half overlap)
+- LSTM classifier on each frame
+- Majority vote aggregation</p>
+<h3>Baseline Results</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>SVM Accuracy</th>
+<th>LSTM Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read</td>
+<td>69.7 ± 6.6%</td>
+<td><strong>83.4 ± 2.6%</strong></td>
+</tr>
+<tr>
+<td>Interview</td>
+<td>64.7 ± 6.3%</td>
+<td><strong>81.6 ± 1.6%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Comparable to General Practitioners (57.9-73.1%)</em></p>
+<h3>Experimental Protocol</h3>
+<ul>
+<li>3-fold cross-validation</li>
+<li>Speaker-independent (no leakage)</li>
+<li>10 repetitions for LSTM (random init)</li>
+<li>Tesla T4 GPU</li>
+</ul>
+<hr />
+<h2>Key Contributions by Chapter</h2>
+<h3>Chapter 4: Duration &amp; Silences</h3>
+<ul>
+<li>Depressed speakers have different temporal patterns</li>
+<li>Longer pauses, different speech-to-silence ratios</li>
+<li>Statistically significant differences between groups</li>
+</ul>
+<h3>Chapter 5: Feature Correlation Matrices</h3>
+<ul>
+<li>Correlation between acoustic features differs in depression</li>
+<li>"Stability" measure as biomarker</li>
+<li>Improved performance over baseline</li>
+</ul>
+<h3>Chapter 6: Multi-local Attention (MLA)</h3>
+<ul>
+<li>Novel attention mechanism for depression-relevant information</li>
+<li>Improves accuracy AND confidence</li>
+<li>Reduces time needed for detection</li>
+</ul>
+<h3>Chapter 7: Cross-Data Multilevel Attention (CDMA)</h3>
+<ul>
+<li>Combines read AND spontaneous speech</li>
+<li>Multiple attention mechanisms</li>
+<li>Captures both task-specific and common depression markers</li>
+<li>Best results in thesis</li>
+</ul>
+<hr />
+<h2>Supporting Publications</h2>
+<ol>
+<li><strong>INTERSPEECH 2023:</strong> "The Androids Corpus: A New Publicly Available Benchmark"</li>
+<li><strong>INTERSPEECH 2020:</strong> "Spotting the Traces of Depression in Read Speech"</li>
+<li><strong>ICASSP 2023:</strong> "Multi-Local Attention for Speech-Based Depression Detection"</li>
+<li><em>Under review:</em> "The Relationship Between Speech Features Changes When You Get Depressed"</li>
+<li><em>To submit:</em> "Cross-Data Multilevel Attention Mechanisms for Depression Detection"</li>
+</ol>
+<hr />
+<h2>Implications for Nile's Dissertation</h2>
+<h3>Why This Thesis is Valuable:</h3>
+<ol>
+<li><strong>Same university</strong> - Glasgow standards and expectations</li>
+<li><strong>Same topic</strong> - Direct comparison possible</li>
+<li><strong>ANDROIDS corpus</strong> - Dataset Nile is exploring</li>
+<li><strong>Recent work</strong> - 2023/2024, state of the art</li>
+<li><strong>Clear methods</strong> - Reproducible protocols</li>
+<li><strong>Published papers</strong> - Citable, validated work</li>
+</ol>
+<h3>Potential Angles for Nile:</h3>
+<ol>
+<li><strong>Replicate on DAIC-WOZ</strong> - Apply Tao's methods to English dataset</li>
+<li><strong>Compare datasets</strong> - ANDROIDS vs DAIC-WOZ cross-validation</li>
+<li><strong>Extend CDMA</strong> - Add linguistic features or other modalities</li>
+<li><strong>Interpretability</strong> - Which features/attention weights matter most?</li>
+<li><strong>UK focus</strong> - Apply to English speakers, NHS context</li>
+</ol>
+<h3>Key Differences to Consider:</h3>
+<ul>
+<li>Tao used Italian data; Nile likely using English (DAIC-WOZ)</li>
+<li>Tao had psychiatric labels; DAIC-WOZ uses PHQ-8 questionnaire</li>
+<li>Different evaluation metrics may be needed</li>
+</ul>
+<hr />
+<h2>Contact</h2>
+<p>Supervisor: Professor Alessandro Vinciarelli (may be worth reaching out if same school)</p></body></html>

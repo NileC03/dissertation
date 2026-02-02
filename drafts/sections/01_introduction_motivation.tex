@@ -1,0 +1,73 @@
+% DRAFT - Introduction / Motivation Section
+% Status: First draft - needs review and refinement
+% Last updated: 2026-02-01
+
+\chapter{Introduction}
+
+\pagenumbering{arabic}
+
+\section{Motivation}
+
+Depression is one of the most significant global health challenges of our time. According to the World Health Organization, approximately 332 million people worldwide suffer from depression, representing 5.7\% of the adult population \citep{WHO2024}. The condition is particularly prevalent among women (6.9\%) compared to men (4.6\%), and represents a leading cause of disability globally. In 2021 alone, an estimated 727,000 people died by suicide, with depression being a major contributing factor \citep{WHO2024}. 
+
+Despite the scale of this crisis, a significant treatment gap persists. Even in high-income countries, only approximately one-third of individuals with depression receive any form of mental health treatment \citep{WHO2024}. This gap exists due to multiple intersecting barriers: social stigma surrounding mental health conditions, limited access to mental health professionals, high costs of treatment, and geographic barriers to healthcare services.
+
+Current approaches to depression diagnosis present fundamental limitations. The gold standard for depression assessment relies on clinical interviews and self-report questionnaires such as the Patient Health Questionnaire (PHQ-9) \citep{Kroenke2001} and the Beck Depression Inventory (BDI) \citep{Beck1961}. While these instruments have demonstrated validity and reliability in clinical settings, they suffer from inherent subjectivity. Diagnosis depends heavily on the clinician's experience, the quality of the clinical interview, and critically, the patient's willingness and ability to accurately report their symptoms \citep{Maran2025}. Field trials of the DSM-5 criteria for major depressive disorder have revealed concerningly low interrater reliability \citep{Regier2013}, highlighting the challenge of achieving consistent diagnoses even among trained professionals.
+
+This subjectivity stands in stark contrast to the diagnosis of many physical health conditions, where objective biomarkers---blood tests, imaging studies, physiological measurements---provide quantifiable data to support clinical decision-making. The absence of equivalent objective biomarkers for depression has long been recognised as a significant barrier to improving diagnosis and treatment outcomes.
+
+Against this backdrop, the analysis of speech as a potential biomarker for depression has emerged as a promising research direction. The rationale for this approach is grounded in neuroscience: depression affects cognitive and motor processes that are directly involved in speech production \citep{Cummins2015}. Depressed individuals have been observed to exhibit characteristic changes in their speech, including reduced pitch variability, slower speaking rate, increased pause duration, and altered voice quality \citep{Koops2023}. These acoustic markers reflect underlying neurophysiological changes and, unlike self-reported symptoms, are difficult for speakers to consciously manipulate.
+
+Recent advances in machine learning, particularly deep learning, have enabled increasingly sophisticated analysis of these speech markers. A comprehensive meta-analysis of 105 studies found that automatic speech analysis achieved pooled accuracy of 81\%, sensitivity of 84\%, and specificity of 83\% in detecting depression \citep{Maran2025}. While these results are promising, the same analysis concluded that speech-based detection is ``not yet ready as a standalone clinical tool'' and should be regarded as a complementary method to existing diagnostic approaches.
+
+Despite considerable academic progress, commercial deployment remains limited. Companies such as Kintsugi Health have developed voice-based mental health APIs, earning recognition including the 2022 Frost \& Sullivan Technology Innovation Leadership Award for vocal biomarkers in mental health \citep{KintsugiAwards}. However, no speech-based depression detection tools have achieved widespread clinical deployment, and notably, no such products have been integrated into the UK's National Health Service.
+
+This gap between research capabilities and clinical reality presents both a challenge and an opportunity. Understanding why effective research models have not translated into deployed clinical tools---and what would be required to bridge this gap---is essential for realising the potential of speech-based mental health assessment.
+
+\section{Research Questions}
+
+% TODO: Refine based on chosen approach
+
+This dissertation investigates the following research questions:
+
+\begin{enumerate}
+    \item \textbf{RQ1:} What speech features are most effective for detecting depression, and what is the relative contribution of different feature categories (prosodic, spectral, temporal, linguistic)?
+    
+    \item \textbf{RQ2:} How do different machine learning approaches (traditional vs. deep learning) compare in terms of detection accuracy and generalisability?
+    
+    \item \textbf{RQ3:} [To be defined based on specific angle chosen]
+\end{enumerate}
+
+\section{Contributions}
+
+This dissertation makes the following contributions:
+
+\begin{enumerate}
+    \item [Contribution 1 - TBD]
+    \item [Contribution 2 - TBD]
+    \item [Contribution 3 - TBD]
+\end{enumerate}
+
+\section{Dissertation Outline}
+
+The remainder of this dissertation is organised as follows:
+
+\textbf{Chapter 2: Background} provides context on depression as a clinical condition, reviews the relationship between speech and depression from a neuroscience perspective, formally defines speech features used for analysis, and surveys existing approaches in the literature.
+
+\textbf{Chapter 3: Analysis/Requirements} defines the specific problem formulation, describes the dataset selection process, and establishes evaluation criteria.
+
+\textbf{Chapter 4: Design} presents the abstract design of the proposed approach, including system architecture, feature extraction strategy, and model design.
+
+\textbf{Chapter 5: Implementation} details the technical implementation, including development environment, preprocessing pipeline, and model training procedures.
+
+\textbf{Chapter 6: Evaluation} presents experimental results, analysis of findings, and discussion of limitations.
+
+\textbf{Chapter 7: Conclusion} summarises the work, reflects on lessons learned, and identifies directions for future research.
+
+% ============================================================
+% NOTES FOR REVISION:
+% - Add UK-specific statistics when available from APMS 2023/4
+% - Refine RQs once approach is finalised
+% - Add citations for all claims
+% - Ensure all references are in BibTeX file
+% ============================================================

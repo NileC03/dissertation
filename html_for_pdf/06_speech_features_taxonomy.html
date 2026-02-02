@@ -1,0 +1,231 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>06_speech_features_taxonomy</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; color: #333; }
+h1 { font-size: 28px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+h2 { font-size: 22px; color: #444; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+h3 { font-size: 18px; color: #555; }
+code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: Monaco, monospace; font-size: 13px; }
+pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #f0f0f0; font-weight: 600; }
+tr:nth-child(even) { background: #fafafa; }
+blockquote { border-left: 4px solid #ddd; margin: 0; padding-left: 20px; color: #666; font-style: italic; }
+hr { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+a { color: #0066cc; }
+strong { color: #111; }
+@media print { body { max-width: none; margin: 0; } }
+</style>
+</head><body><h1>Speech Features for Depression Detection: A Taxonomy</h1>
+<h2>What is Speech? (Formal Definition)</h2>
+<p>Speech is a <strong>time-varying acoustic signal</strong> produced by the human vocal apparatus, consisting of:
+1. <strong>Phonation</strong> - vocal fold vibration generating the fundamental frequency (F0)
+2. <strong>Articulation</strong> - shaping of the vocal tract to produce distinct sounds
+3. <strong>Prosody</strong> - suprasegmental features (rhythm, stress, intonation)</p>
+<p>Speech can be analyzed in multiple domains:
+- <strong>Time domain</strong> - amplitude over time (waveform)
+- <strong>Frequency domain</strong> - spectral content (via Fourier transform)
+- <strong>Time-frequency domain</strong> - spectrograms, MFCCs</p>
+<hr />
+<h2>Feature Categories</h2>
+<h3>1. Prosodic Features (Suprasegmental)</h3>
+<h4>1.1 Pitch (Fundamental Frequency, F0)</h4>
+<p><strong>Definition:</strong> The rate of vocal fold vibration, perceived as voice pitch.<br />
+<strong>Measurement:</strong> In Hertz (Hz), typically 85-180 Hz (male), 165-255 Hz (female)</p>
+<p><strong>Features extracted:</strong>
+- Mean F0
+- F0 standard deviation
+- F0 range (max - min)
+- F0 contour (rising/falling patterns)
+- Jitter (cycle-to-cycle F0 variation)</p>
+<p><strong>Depression association:</strong> Lower mean F0, reduced F0 variability (monotone)</p>
+<h4>1.2 Energy/Intensity</h4>
+<p><strong>Definition:</strong> Amplitude of the speech signal, perceived as loudness.<br />
+<strong>Measurement:</strong> In decibels (dB)</p>
+<p><strong>Features extracted:</strong>
+- Mean energy
+- Energy standard deviation
+- Energy range
+- Shimmer (cycle-to-cycle amplitude variation)</p>
+<p><strong>Depression association:</strong> Lower overall energy, reduced variation</p>
+<h4>1.3 Temporal Features</h4>
+<p><strong>Definition:</strong> Timing and rhythm of speech production.</p>
+<p><strong>Features extracted:</strong>
+- Speech rate (syllables/phonemes per second)
+- Articulation rate (excluding pauses)
+- Pause duration (mean, max, total)
+- Pause frequency
+- Speech-to-pause ratio
+- Response latency</p>
+<p><strong>Depression association:</strong> Slower rate, longer/more pauses, increased latency</p>
+<hr />
+<h3>2. Spectral Features</h3>
+<h4>2.1 Mel-Frequency Cepstral Coefficients (MFCCs)</h4>
+<p><strong>Definition:</strong> Coefficients representing the short-term power spectrum on a mel scale (approximating human auditory perception).</p>
+<p><strong>Typically extracted:</strong>
+- 13 MFCCs (static)
+- Delta MFCCs (first derivative)
+- Delta-delta MFCCs (second derivative)
+- = 39 features total</p>
+<p><strong>Why useful:</strong> Captures vocal tract characteristics, widely used in speech recognition</p>
+<h4>2.2 Formants</h4>
+<p><strong>Definition:</strong> Resonant frequencies of the vocal tract, F1, F2, F3...</p>
+<p><strong>Features:</strong>
+- F1 (related to vowel height, ~300-800 Hz)
+- F2 (related to vowel frontness, ~800-2500 Hz)
+- F3 (speaker characteristics, ~2000-3500 Hz)
+- Formant bandwidth
+- Formant transitions</p>
+<p><strong>Depression association:</strong> Changes in articulation precision</p>
+<h4>2.3 Other Spectral Features</h4>
+<ul>
+<li><strong>Spectral centroid</strong> - "center of mass" of spectrum</li>
+<li><strong>Spectral flux</strong> - rate of change in spectrum</li>
+<li><strong>Spectral rolloff</strong> - frequency below which X% of energy lies</li>
+<li><strong>Spectral entropy</strong> - randomness/uniformity of spectrum</li>
+<li><strong>Harmonic-to-Noise Ratio (HNR)</strong> - voice quality measure</li>
+</ul>
+<hr />
+<h3>3. Voice Quality Features</h3>
+<h4>3.1 Jitter</h4>
+<p><strong>Definition:</strong> Cycle-to-cycle variation in fundamental frequency (F0)<br />
+<strong>Types:</strong> Local jitter, RAP, PPQ5<br />
+<strong>Units:</strong> Percentage or absolute (microseconds)</p>
+<h4>3.2 Shimmer</h4>
+<p><strong>Definition:</strong> Cycle-to-cycle variation in amplitude<br />
+<strong>Types:</strong> Local shimmer, APQ3, APQ5, APQ11<br />
+<strong>Units:</strong> Percentage or dB</p>
+<h4>3.3 Harmonic-to-Noise Ratio (HNR)</h4>
+<p><strong>Definition:</strong> Ratio of periodic (harmonic) to aperiodic (noise) components<br />
+<strong>Units:</strong> dB<br />
+<strong>Interpretation:</strong> Higher = clearer voice; lower = breathier/hoarser</p>
+<p><strong>Depression association:</strong> Increased jitter/shimmer, decreased HNR</p>
+<hr />
+<h3>4. Linguistic/Content Features</h3>
+<h4>4.1 Lexical Features</h4>
+<ul>
+<li>Word count</li>
+<li>Type-token ratio (vocabulary diversity)</li>
+<li>Use of first-person pronouns</li>
+<li>Negative emotion words</li>
+<li>Absolute terms ("always", "never")</li>
+</ul>
+<h4>4.2 Semantic Features</h4>
+<ul>
+<li>Sentiment scores</li>
+<li>Topic modeling</li>
+<li>LIWC (Linguistic Inquiry and Word Count) categories</li>
+</ul>
+<p><strong>Note:</strong> Requires transcript (ASR or manual)</p>
+<hr />
+<h3>5. Deep Learning Representations</h3>
+<h4>5.1 Self-Supervised Representations</h4>
+<ul>
+<li><strong>Wav2Vec 2.0</strong> - Facebook/Meta's pre-trained model</li>
+<li><strong>HuBERT</strong> - Hidden-Unit BERT</li>
+<li><strong>WavLM</strong> - Microsoft's model</li>
+</ul>
+<p><strong>Advantage:</strong> Learn features directly from data, often outperform hand-crafted features</p>
+<h4>5.2 Spectrogram-based</h4>
+<ul>
+<li>Log-mel spectrograms → CNN</li>
+<li>Raw waveform → 1D CNN</li>
+</ul>
+<hr />
+<h2>Statistical Methods for Measuring Differences</h2>
+<h3>Descriptive Statistics</h3>
+<ul>
+<li>Mean, median, mode</li>
+<li>Standard deviation, variance</li>
+<li>Skewness, kurtosis</li>
+<li>Range, percentiles</li>
+</ul>
+<h3>Functionals (Applied to LLDs)</h3>
+<p>Low-level descriptors (LLDs) computed frame-by-frame are summarized using functionals:
+- Mean, std, min, max
+- Quartiles (25th, 50th, 75th percentile)
+- Linear regression coefficients
+- Peaks (number, mean distance)</p>
+<h3>Statistical Testing</h3>
+<ul>
+<li><strong>T-tests</strong> - compare means between groups</li>
+<li><strong>Mann-Whitney U</strong> - non-parametric comparison</li>
+<li><strong>Effect size</strong> (Cohen's d) - magnitude of difference</li>
+<li><strong>ANOVA</strong> - multiple group comparison</li>
+</ul>
+<h3>Machine Learning Evaluation</h3>
+<ul>
+<li>Accuracy, Precision, Recall, F1-score</li>
+<li><strong>Concordance Correlation Coefficient (CCC)</strong> - standard for AVEC/regression</li>
+<li>ROC-AUC (classification)</li>
+<li>Mean Absolute Error, RMSE (regression)</li>
+</ul>
+<hr />
+<h2>Common Feature Extraction Tools</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Language</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>OpenSMILE</strong></td>
+<td>Comprehensive feature extraction</td>
+<td>C++</td>
+</tr>
+<tr>
+<td><strong>Praat</strong></td>
+<td>Phonetic analysis, F0/formants</td>
+<td>Praat script</td>
+</tr>
+<tr>
+<td><strong>Librosa</strong></td>
+<td>Python audio analysis</td>
+<td>Python</td>
+</tr>
+<tr>
+<td><strong>pyAudioAnalysis</strong></td>
+<td>Audio feature extraction</td>
+<td>Python</td>
+</tr>
+<tr>
+<td><strong>SpeechBrain</strong></td>
+<td>Deep learning toolkit</td>
+<td>Python</td>
+</tr>
+<tr>
+<td><strong>Parselmouth</strong></td>
+<td>Praat in Python</td>
+<td>Python</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Feature Sets / Standards</h2>
+<h3>eGeMAPS (extended Geneva Minimalistic Acoustic Parameter Set)</h3>
+<ul>
+<li>88 features</li>
+<li>Standardized, interpretable</li>
+<li>Used in AVEC challenges</li>
+</ul>
+<h3>ComParE (Computational Paralinguistics Challenge)</h3>
+<ul>
+<li>~6000+ features</li>
+<li>Brute-force approach</li>
+<li>Used in INTERSPEECH challenges</li>
+</ul>
+<h3>IS09-IS13 Feature Sets</h3>
+<ul>
+<li>INTERSPEECH challenge feature sets</li>
+<li>Various sizes (384-6373 features)</li>
+</ul>
+<hr />
+<h2>Key References</h2>
+<ul>
+<li>Schuller, B., et al. (2016). "The Geneva Minimalistic Acoustic Parameter Set (GeMAPS) for Voice Research and Affective Computing." IEEE TAC.</li>
+<li>Cummins, N., et al. (2015). "A review of depression and suicide risk assessment using speech analysis." Speech Communication.</li>
+</ul></body></html>

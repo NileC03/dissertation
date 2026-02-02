@@ -1,0 +1,467 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>03_daic_woz_dataset_summary</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; color: #333; }
+h1 { font-size: 28px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+h2 { font-size: 22px; color: #444; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+h3 { font-size: 18px; color: #555; }
+code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: Monaco, monospace; font-size: 13px; }
+pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #f0f0f0; font-weight: 600; }
+tr:nth-child(even) { background: #fafafa; }
+blockquote { border-left: 4px solid #ddd; margin: 0; padding-left: 20px; color: #666; font-style: italic; }
+hr { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+a { color: #0066cc; }
+strong { color: #111; }
+@media print { body { max-width: none; margin: 0; } }
+</style>
+</head><body><h1>DAIC-WOZ Dataset Summary</h1>
+<h2>Distress Analysis Interview Corpus - Wizard of Oz</h2>
+<p><strong>Maintainer:</strong> USC Institute for Creative Technologies (ICT)<br />
+<strong>URL:</strong> https://dcapswoz.ict.usc.edu/<br />
+<strong>Access:</strong> Research use only (requires data use agreement)</p>
+<hr />
+<h2>Overview</h2>
+<p>The DAIC-WOZ (Distress Analysis Interview Corpus - Wizard of Oz) is a <strong>clinical interview dataset</strong> designed to support diagnosis of psychological distress conditions including:
+- Anxiety
+- Depression
+- Post-Traumatic Stress Disorder (PTSD)</p>
+<h3>Key Characteristics</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Participants</strong></td>
+<td>189 sessions</td>
+</tr>
+<tr>
+<td><strong>Duration</strong></td>
+<td>7-33 minutes (avg: 16 minutes)</td>
+</tr>
+<tr>
+<td><strong>Language</strong></td>
+<td>English (American)</td>
+</tr>
+<tr>
+<td><strong>Population</strong></td>
+<td>US Army veterans and general population</td>
+</tr>
+<tr>
+<td><strong>Ground Truth</strong></td>
+<td>PHQ-8 questionnaire scores</td>
+</tr>
+<tr>
+<td><strong>Interviewer</strong></td>
+<td>"Ellie" - animated virtual interviewer</td>
+</tr>
+<tr>
+<td><strong>Control Method</strong></td>
+<td>Wizard-of-Oz (human interviewer in another room)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Data Collection</h2>
+<h3>The SimSensei Kiosk</h3>
+<p>Interviews were conducted using the <strong>SimSensei Kiosk</strong> - a virtual human interviewer for healthcare decision support (DeVault et al., 2014).</p>
+<ul>
+<li><strong>Virtual Agent:</strong> "Ellie" - animated avatar</li>
+<li><strong>Interview Style:</strong> Semi-structured clinical interview</li>
+<li><strong>Questions:</strong> Open-ended about life, relationships, stress</li>
+<li><strong>Wizard-of-Oz:</strong> Human controls Ellie from another room</li>
+<li><strong>Later versions:</strong> Fully autonomous AI agent (Extended DAIC)</li>
+</ul>
+<h3>Collection Goals</h3>
+<p>Part of larger effort to create AI that:
+1. Interviews people naturally
+2. Identifies verbal and nonverbal indicators of mental illness
+3. Supports clinical decision-making</p>
+<hr />
+<h2>Available Modalities</h2>
+<h3>1. Audio</h3>
+<ul>
+<li>Full participant audio recordings</li>
+<li>High-quality speech capture</li>
+</ul>
+<h3>2. Video</h3>
+<ul>
+<li>Face video recordings</li>
+<li>Used for facial expression analysis</li>
+</ul>
+<h3>3. Transcripts</h3>
+<ul>
+<li>Full transcription of interactions</li>
+<li>Time-aligned to audio/video</li>
+</ul>
+<h3>4. Extracted Features</h3>
+<ul>
+<li><strong>Facial Features:</strong> Facial Action Units (FAUs)</li>
+<li><strong>Acoustic Features:</strong> Pre-extracted using standard toolkits</li>
+<li><strong>Linguistic Features:</strong> Text-based features</li>
+</ul>
+<h3>5. Questionnaire Responses</h3>
+<ul>
+<li>PHQ-8 (Primary Outcome)</li>
+<li>Additional psychological assessments</li>
+</ul>
+<hr />
+<h2>PHQ-8 Depression Scoring</h2>
+<p>The <strong>PHQ-8</strong> (Patient Health Questionnaire-8) is the primary label:</p>
+<table>
+<thead>
+<tr>
+<th>Score Range</th>
+<th>Severity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0-4</td>
+<td>None/minimal</td>
+</tr>
+<tr>
+<td>5-9</td>
+<td>Mild</td>
+</tr>
+<tr>
+<td>10-14</td>
+<td>Moderate</td>
+</tr>
+<tr>
+<td>15-19</td>
+<td>Moderately severe</td>
+</tr>
+<tr>
+<td>20-24</td>
+<td>Severe</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Clinical Cutoff:</strong> PHQ-8 ≥ 10 typically indicates clinically relevant depression</p>
+<hr />
+<h2>Dataset Splits</h2>
+<h3>AVEC Challenge Partitions</h3>
+<table>
+<thead>
+<tr>
+<th>Set</th>
+<th>Sessions</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training</td>
+<td>~107</td>
+<td>Model development</td>
+</tr>
+<tr>
+<td>Development</td>
+<td>~35</td>
+<td>Hyperparameter tuning</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>~47</td>
+<td>Final evaluation</td>
+</tr>
+</tbody>
+</table>
+<p><em>Note: Exact splits vary by challenge year (AVEC 2016, 2017, 2019)</em></p>
+<hr />
+<h2>AVEC Challenge History</h2>
+<p>DAIC-WOZ has been used in multiple AVEC (Audio/Visual Emotion Challenge) competitions:</p>
+<h3>AVEC 2016</h3>
+<ul>
+<li><strong>Task:</strong> Depression severity prediction (PHQ-8)</li>
+<li><strong>Metric:</strong> Mean Absolute Error (MAE), RMSE</li>
+</ul>
+<h3>AVEC 2017</h3>
+<ul>
+<li><strong>Extended tasks:</strong> Added PTSD prediction</li>
+<li><strong>Additional:</strong> GAD-7 for anxiety</li>
+</ul>
+<h3>AVEC 2019 (Extended DAIC)</h3>
+<ul>
+<li><strong>Key Change:</strong> Test set uses fully autonomous AI interviewer</li>
+<li><strong>Research Question:</strong> How does AI-only interviewer affect detection?</li>
+<li><strong>Metric:</strong> Concordance Correlation Coefficient (CCC)</li>
+</ul>
+<hr />
+<h2>Data Access</h2>
+<h3>How to Obtain</h3>
+<ol>
+<li>Visit: https://dcapswoz.ict.usc.edu/</li>
+<li>Sign data use agreement (for research purposes only)</li>
+<li>Download individual session ZIP files</li>
+</ol>
+<h3>File Structure (per session)</h3>
+<pre><code>XXX_P.zip/
+├── XXX_AUDIO.wav          # Participant audio
+├── XXX_TRANSCRIPT.csv     # Time-aligned transcript
+├── XXX_FORMANT.csv        # Formant features
+├── XXX_COVAREP.csv        # COVAREP acoustic features
+├── XXX_FAC.csv            # Facial action coding
+├── XXX_CLNF.csv           # CLnF facial features
+├── XXX_OpenFace.csv       # OpenFace features
+└── metadata/              # Session metadata, labels
+</code></pre>
+<h3>Total Size</h3>
+<ul>
+<li>Individual sessions: 187MB - 957MB each</li>
+<li>Full corpus: ~80GB+</li>
+</ul>
+<hr />
+<h2>Baseline Results</h2>
+<h3>AVEC Challenge Baselines</h3>
+<table>
+<thead>
+<tr>
+<th>Challenge</th>
+<th>Modality</th>
+<th>Model</th>
+<th>MAE (PHQ-8)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AVEC 2016</td>
+<td>Audio</td>
+<td>SVM</td>
+<td>6.74</td>
+</tr>
+<tr>
+<td>AVEC 2016</td>
+<td>Video</td>
+<td>RF</td>
+<td>6.12</td>
+</tr>
+<tr>
+<td>AVEC 2017</td>
+<td>Audio</td>
+<td>RF</td>
+<td>5.72</td>
+</tr>
+<tr>
+<td>AVEC 2019</td>
+<td>Multi</td>
+<td>DepAudioNet</td>
+<td>5.29</td>
+</tr>
+</tbody>
+</table>
+<h3>State-of-the-Art Results (Literature)</h3>
+<table>
+<thead>
+<tr>
+<th>Paper</th>
+<th>Year</th>
+<th>Model</th>
+<th>Performance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fan et al.</td>
+<td>2019</td>
+<td>LASSO</td>
+<td>MAE: 5.31</td>
+</tr>
+<tr>
+<td>Srimadhur &amp; Lalitha</td>
+<td>2020</td>
+<td>CNN-BiLSTM</td>
+<td>MAE: 4.28</td>
+</tr>
+<tr>
+<td>Multimodal</td>
+<td>Various</td>
+<td>Transformer</td>
+<td>MAE: ~4.0</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Comparison: DAIC-WOZ vs ANDROIDS</h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>DAIC-WOZ</th>
+<th>ANDROIDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Language</strong></td>
+<td>English</td>
+<td>Italian</td>
+</tr>
+<tr>
+<td><strong>Labels</strong></td>
+<td>PHQ-8 (self-report)</td>
+<td>Psychiatric diagnosis</td>
+</tr>
+<tr>
+<td><strong>Participants</strong></td>
+<td>189 sessions</td>
+<td>118 participants</td>
+</tr>
+<tr>
+<td><strong>Speech Type</strong></td>
+<td>Spontaneous only</td>
+<td>Read + Spontaneous</td>
+</tr>
+<tr>
+<td><strong>Interview</strong></td>
+<td>Virtual agent</td>
+<td>Human interviewer</td>
+</tr>
+<tr>
+<td><strong>Availability</strong></td>
+<td>Restricted</td>
+<td>Publicly available</td>
+</tr>
+<tr>
+<td><strong>Challenge</strong></td>
+<td>AVEC 2016-2019</td>
+<td>INTERSPEECH 2023</td>
+</tr>
+</tbody>
+</table>
+<h3>Implications</h3>
+<ul>
+<li>DAIC-WOZ: Larger, self-report labels, controlled setting</li>
+<li>ANDROIDS: Psychiatric ground truth, multi-task, public access</li>
+</ul>
+<hr />
+<h2>Strengths</h2>
+<ol>
+<li><strong>Large-scale:</strong> 189 sessions, substantial data volume</li>
+<li><strong>Multimodal:</strong> Audio, video, text, extracted features</li>
+<li><strong>Well-benchmarked:</strong> Standard AVEC challenge comparisons</li>
+<li><strong>English:</strong> Largest English depression speech dataset</li>
+<li><strong>Real-world:</strong> Veterans with actual psychological conditions</li>
+<li><strong>Pre-extracted features:</strong> Ready for ML experimentation</li>
+</ol>
+<h2>Limitations</h2>
+<ol>
+<li><strong>Self-report labels:</strong> PHQ-8 vs clinical diagnosis</li>
+<li><strong>Data access:</strong> Requires agreement, not fully public</li>
+<li><strong>US-centric:</strong> May not generalize to other populations</li>
+<li><strong>Virtual interviewer:</strong> Affects naturalness of speech</li>
+<li><strong>No read speech:</strong> Only spontaneous/conversational</li>
+</ol>
+<hr />
+<h2>Key References</h2>
+<h3>Primary Dataset Paper</h3>
+<pre><code class="language-bibtex">@inproceedings{gratch2014distress,
+  title={The distress analysis interview corpus of human and computer interviews},
+  author={Gratch, Jonathan and Artstein, Ron and Lucas, Gale M and Stratou, Giota and Scherer, Stefan and Nazarian, Angela and Wood, Rachel and Boberg, Jill and DeVault, David and Marsella, Stacy and others},
+  booktitle={Proceedings of LREC},
+  pages={3123--3128},
+  year={2014}
+}
+</code></pre>
+<h3>SimSensei Kiosk</h3>
+<pre><code class="language-bibtex">@inproceedings{devault2014simsensei,
+  title={SimSensei kiosk: A virtual human interviewer for healthcare decision support},
+  author={DeVault, David and Artstein, Ron and Benn, Grace and Dey, Teresa and Fast, Ed and Gainer, Alesia and Georgila, Kallirroi and Gratch, Jon and Hartholt, Arno and Lhommet, Margaux and others},
+  booktitle={Proceedings of AAMAS},
+  year={2014}
+}
+</code></pre>
+<h3>AVEC 2019 Challenge</h3>
+<pre><code class="language-bibtex">@inproceedings{ringeval2019avec,
+  title={AVEC 2019 workshop and challenge: state-of-mind, detecting depression with AI, and cross-cultural affect recognition},
+  author={Ringeval, Fabien and Schuller, Bj{\&quot;o}rn and Valstar, Michel and Cummins, Nicholas and Cowie, Roddy and Tavabi, Leili and Schmitt, Maximilian and Alisamir, Sina and Amiriparian, Shahin and Messner, Eva-Maria and others},
+  booktitle={Proceedings of the 9th International on Audio/Visual Emotion Challenge and Workshop},
+  pages={3--12},
+  year={2019}
+}
+</code></pre>
+<hr />
+<h2>Implications for Nile's Dissertation</h2>
+<h3>Why DAIC-WOZ is Valuable:</h3>
+<ol>
+<li><strong>Gold standard:</strong> Primary benchmark for depression detection</li>
+<li><strong>English:</strong> Relevant to UK/NHS context</li>
+<li><strong>Well-documented:</strong> Extensive research history</li>
+<li><strong>Feature-ready:</strong> Pre-extracted features available</li>
+<li><strong>Comparable:</strong> Standard AVEC metrics allow comparison</li>
+</ol>
+<h3>Potential Research Directions:</h3>
+<ol>
+<li><strong>Apply Glasgow methods:</strong> Test Tao's MLA/CDMA on DAIC-WOZ</li>
+<li><strong>Cross-corpus validation:</strong> Train ANDROIDS → Test DAIC-WOZ</li>
+<li><strong>Feature analysis:</strong> Which acoustic features predict PHQ-8?</li>
+<li><strong>Interpretability:</strong> Explain model decisions</li>
+<li><strong>NHS applicability:</strong> Can models detect UK depression patterns?</li>
+</ol>
+<h3>Technical Considerations:</h3>
+<ol>
+<li><strong>Data agreement required:</strong> Allow time for access</li>
+<li><strong>Large downloads:</strong> ~80GB total corpus</li>
+<li><strong>PHQ-8 vs clinical:</strong> Consider label reliability</li>
+<li><strong>Spontaneous only:</strong> No read speech comparison possible</li>
+</ol>
+<hr />
+<h2>Related Datasets</h2>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Language</th>
+<th>N</th>
+<th>Labels</th>
+<th>Public</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DAIC-WOZ</strong></td>
+<td>English</td>
+<td>189</td>
+<td>PHQ-8</td>
+<td>Restricted</td>
+</tr>
+<tr>
+<td><strong>ANDROIDS</strong></td>
+<td>Italian</td>
+<td>118</td>
+<td>Psychiatric</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>SEWA</strong></td>
+<td>Multi</td>
+<td>1900+</td>
+<td>Emotion</td>
+<td>Restricted</td>
+</tr>
+<tr>
+<td><strong>CMU-MOSEI</strong></td>
+<td>English</td>
+<td>1000+</td>
+<td>Emotion</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>EATD-Corpus</strong></td>
+<td>Chinese</td>
+<td>162</td>
+<td>SDS</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Document created: 2026-02-01</em><br />
+<em>For Nile's dissertation: "Identifying Depression Through Speech"</em></p></body></html>

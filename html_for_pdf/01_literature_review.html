@@ -1,0 +1,267 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>01_literature_review</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; color: #333; }
+h1 { font-size: 28px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+h2 { font-size: 22px; color: #444; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+h3 { font-size: 18px; color: #555; }
+code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: Monaco, monospace; font-size: 13px; }
+pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #f0f0f0; font-weight: 600; }
+tr:nth-child(even) { background: #fafafa; }
+blockquote { border-left: 4px solid #ddd; margin: 0; padding-left: 20px; color: #666; font-style: italic; }
+hr { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+a { color: #0066cc; }
+strong { color: #111; }
+@media print { body { max-width: none; margin: 0; } }
+</style>
+</head><body><h1>Literature Review: Depression Detection Through Speech</h1>
+<h2>Overview</h2>
+<p>Depression detection through speech is an active area of research at the intersection of speech processing, machine learning, and clinical psychology. The field aims to identify acoustic and linguistic markers of depression that could enable automated, objective screening tools.</p>
+<hr />
+<h2>Key Datasets</h2>
+<h3>1. DAIC-WOZ (Distress Analysis Interview Corpus - Wizard-of-Oz)</h3>
+<p><strong>Source:</strong> USC Institute for Creative Technologies<br />
+<strong>URL:</strong> https://dcapswoz.ict.usc.edu/</p>
+<p><strong>Description:</strong>
+- Clinical interviews designed to support diagnosis of psychological distress conditions (anxiety, depression, PTSD)
+- Interviews conducted by "Ellie" - an animated virtual interviewer (controlled by human in Wizard-of-Oz setup)
+- <strong>189 sessions</strong>, ranging 7-33 minutes (average 16 minutes)
+- Includes: audio recordings, video recordings, transcripts, facial features, questionnaire responses
+- Ground truth: PHQ-8 depression questionnaire scores</p>
+<p><strong>Key Papers:</strong>
+- Gratch et al. (2014) "The Distress Analysis Interview Corpus of Human and Computer Interviews" - LREC 2014
+- DeVault et al. (2014) "SimSensei kiosk: A virtual human interviewer for healthcare decision support" - AAMAS 2014</p>
+<h3>2. Extended DAIC Database</h3>
+<ul>
+<li>Extension of DAIC-WOZ for AVEC 2019 challenge</li>
+<li>Includes recordings where virtual agent is <strong>fully AI-driven</strong> (no human Wizard-of-Oz)</li>
+<li>Tests how absence of human interviewer impacts depression assessment</li>
+</ul>
+<h3>3. ANDROIDS Corpus</h3>
+<p><strong>Status:</strong> Need to verify exact GitHub location<br />
+<strong>Note:</strong> Nile mentioned exploring this - will investigate further</p>
+<hr />
+<h2>Recent Key Papers (2023-2025)</h2>
+<h3>Systematic Reviews &amp; Meta-Analyses</h3>
+<h4>1. "Performance of Automatic Speech Analysis in Detecting Depression: Systematic Review and Meta-Analysis"</h4>
+<p><strong>Authors:</strong> Maran et al. (2025)<br />
+<strong>Journal:</strong> JMIR Mental Health<br />
+<strong>DOI:</strong> 10.2196/67802</p>
+<p><strong>Key Findings (105 studies reviewed):</strong>
+- Pooled highest accuracy: <strong>0.81</strong> (95% CI: 0.79-0.83)
+- Pooled highest sensitivity: <strong>0.84</strong> (95% CI: 0.81-0.86)
+- Pooled highest specificity: <strong>0.83</strong> (95% CI: 0.79-0.86)
+- Pooled highest precision: <strong>0.81</strong> (95% CI: 0.77-0.84)</p>
+<p><strong>Lowest performance metrics:</strong>
+- Accuracy: 0.66, Sensitivity: 0.63, Specificity: 0.60, Precision: 0.64</p>
+<p><strong>Conclusion:</strong> "ASA shows promise as a method for detecting depression, though its readiness for clinical application as a standalone tool remains limited. At present, it should be regarded as a complementary method."</p>
+<h4>2. "Speech as a biomarker for depression"</h4>
+<p><strong>Authors:</strong> Koops, Brederoo, de Boer et al. (2023)<br />
+<strong>Journal:</strong> CNS &amp; Neurological Disorders - Drug Targets<br />
+<strong>Cited by:</strong> 119</p>
+<h4>3. "Speech-based depression assessment: A comprehensive survey"</h4>
+<p><strong>Authors:</strong> Leal, Ntalampiras, Sassi (2024)<br />
+<strong>Journal:</strong> IEEE Transactions<br />
+<strong>Cited by:</strong> 19</p>
+<h4>4. "Diagnostic accuracy of traditional and deep learning methods..."</h4>
+<p><strong>Authors:</strong> Lu et al. (2025)<br />
+<strong>Journal:</strong> BMC Psychiatry<br />
+<strong>Note:</strong> Compares traditional ML vs deep learning approaches</p>
+<hr />
+<h2>⭐ University of Glasgow PhD Thesis (Highly Relevant!)</h2>
+<h3>"Speech-based automatic depression detection via biomarkers identification and artificial intelligence approaches"</h3>
+<p><strong>Author:</strong> Fuxiang Tao (2024)<br />
+<strong>Supervisor:</strong> Professor Alessandro Vinciarelli<br />
+<strong>Institution:</strong> University of Glasgow, School of Engineering<br />
+<strong>URL:</strong> https://theses.gla.ac.uk/84055/<br />
+<strong>DOI:</strong> 10.5525/gla.thesis.84055</p>
+<p><strong>Abstract Summary:</strong>
+- Depression affects 300+ million people globally
+- Traditional diagnosis: time-consuming, dependent on clinical experience
+- Thesis shows TWO ways to benefit from automatic detection:
+  1. <strong>Identifying speech markers</strong> (duration, pauses, correlation matrices)
+  2. <strong>Novel deep learning models</strong> (Multi-local Attention, Cross-Data Multilevel Attention)</p>
+<p><strong>Key Contributions:</strong>
+- Proposed speech markers: speech duration, pauses, acoustic feature correlation matrices
+- Found statistically significant differences between depressed/non-depressed
+- Proposed Multi-local Attention (MLA) mechanism
+- Proposed Cross-Data Multilevel Attention (CDMA) model</p>
+<p><strong>Related Publications:</strong>
+- INTERSPEECH 2023, 2020
+- ICASSP 2023
+- WACV 2023</p>
+<p><strong>Why This Matters:</strong> Same university, same topic, recent work. Could be valuable reference.</p>
+<h3>4. SEWA Corpus</h3>
+<ul>
+<li>Cross-cultural emotion recognition dataset</li>
+<li>German, Hungarian, Chinese cultures</li>
+<li>Audio-visual recordings "in-the-wild" (webcams, home/workplace)</li>
+</ul>
+<hr />
+<h2>Benchmark Challenges</h2>
+<h3>AVEC (Audio/Visual Emotion Challenge) Series</h3>
+<p>The AVEC challenge series has been instrumental in advancing depression detection research:</p>
+<h4>AVEC 2019: "State-of-Mind, Detecting Depression with AI, and Cross-cultural Affect"</h4>
+<p><strong>Venue:</strong> ACM Multimedia 2019, Nice, France</p>
+<p><strong>Three Sub-Challenges:</strong></p>
+<ol>
+<li><strong>State-of-Mind Sub-Challenge (SoMS)</strong></li>
+<li>Predict self-reported mood (10-point Likert scale) from audio-visual recordings</li>
+<li>
+<p>Evaluates continuous adaptation of human state-of-mind</p>
+</li>
+<li>
+<p><strong>Detecting Depression with AI Sub-Challenge (DDS)</strong> ⭐ Most relevant</p>
+</li>
+<li>Predict PHQ-8 depression severity scores</li>
+<li>Used DAIC-WOZ corpus + new AI-driven interviews</li>
+<li>
+<p>Performance metric: Concordance Correlation Coefficient (CCC)</p>
+</li>
+<li>
+<p><strong>Cross-cultural Emotion Sub-Challenge (CES)</strong></p>
+</li>
+<li>Transfer learning across cultures (German/Hungarian → Chinese)</li>
+</ol>
+<p><strong>Research Contributions Sought:</strong>
+- Multimodal affect sensing (audio, video, physiological)
+- Transfer learning
+- Semi-supervised/unsupervised learning
+- Personalized recognition
+- Context in emotion recognition</p>
+<h4>Previous AVEC Challenges</h4>
+<ul>
+<li>AVEC 2016: Depression Sub-Challenge (DSC) - predecessor to 2019 DDS</li>
+<li>AVEC 2018: Cross-cultural emotion recognition</li>
+</ul>
+<hr />
+<h2>Speech Features for Depression Detection</h2>
+<h3>Acoustic Features (Low-Level Descriptors)</h3>
+<ol>
+<li><strong>Prosodic Features</strong></li>
+<li>Pitch (F0) - fundamental frequency</li>
+<li>Pitch variability</li>
+<li>Speaking rate</li>
+<li>Pause patterns (duration, frequency)</li>
+<li>
+<p>Energy/intensity contours</p>
+</li>
+<li>
+<p><strong>Spectral Features</strong></p>
+</li>
+<li>Mel-Frequency Cepstral Coefficients (MFCCs)</li>
+<li>Formant frequencies (F1, F2, F3)</li>
+<li>Spectral flux</li>
+<li>
+<p>Spectral centroid</p>
+</li>
+<li>
+<p><strong>Voice Quality Features</strong></p>
+</li>
+<li>Jitter (pitch perturbation)</li>
+<li>Shimmer (amplitude perturbation)</li>
+<li>
+<p>Harmonics-to-Noise Ratio (HNR)</p>
+</li>
+<li>
+<p><strong>Temporal Features</strong></p>
+</li>
+<li>Speech rate</li>
+<li>Articulation rate</li>
+<li>Pause-to-speech ratio</li>
+<li>Response latency</li>
+</ol>
+<h3>Common Observations in Depressed Speech</h3>
+<ul>
+<li>Reduced pitch variability (monotone)</li>
+<li>Slower speech rate</li>
+<li>Longer pauses</li>
+<li>Reduced energy/volume</li>
+<li>Lower F0 (pitch)</li>
+<li>Different formant patterns</li>
+</ul>
+<hr />
+<h2>Tools &amp; Libraries</h2>
+<h3>SpeechBrain</h3>
+<p><strong>URL:</strong> https://speechbrain.github.io/<br />
+<strong>GitHub:</strong> https://github.com/speechbrain/speechbrain</p>
+<ul>
+<li>Open-source PyTorch toolkit for conversational AI</li>
+<li>200+ training recipes on 40+ datasets</li>
+<li>Supports: speech recognition, speaker recognition, speech enhancement, emotion recognition</li>
+<li>Pre-trained models on HuggingFace</li>
+<li>Good for feature extraction and model development</li>
+</ul>
+<h3>Other Relevant Tools</h3>
+<ul>
+<li>OpenSMILE - audio feature extraction</li>
+<li>Praat - phonetic analysis</li>
+<li>Librosa - Python audio analysis</li>
+<li>Wav2Vec 2.0 / HuBERT - self-supervised speech representations</li>
+</ul>
+<hr />
+<h2>Research Gaps (Potential Angles)</h2>
+<ol>
+<li><strong>Generalization across datasets</strong> - models often don't transfer well</li>
+<li><strong>Cross-cultural validity</strong> - most research on Western populations</li>
+<li><strong>Real-world deployment</strong> - lab conditions vs. real clinical settings</li>
+<li><strong>Longitudinal monitoring</strong> - tracking depression over time</li>
+<li><strong>Multimodal fusion</strong> - combining audio with text/video</li>
+<li><strong>Explainability</strong> - which features drive predictions?</li>
+<li><strong>Privacy-preserving methods</strong> - on-device processing</li>
+</ol>
+<hr />
+<h2>Key Questions to Address in Dissertation</h2>
+<h3>From Advisor:</h3>
+<ol>
+<li>Is there anything commercially available?</li>
+<li>What are current approaches?</li>
+<li>How many people in UK are affected?</li>
+<li>Is there a need? What is the need for AI tools?</li>
+<li>What is speech formally? How do you measure differences?</li>
+<li>What statistical methods exist?</li>
+</ol>
+<h3>Additional Research Questions:</h3>
+<ul>
+<li>What features are most predictive of depression?</li>
+<li>How do different ML architectures compare?</li>
+<li>What are the ethical considerations?</li>
+<li>How would this work in clinical practice?</li>
+</ul>
+<hr />
+<h2>Next Steps</h2>
+<ol>
+<li>[ ] Find and review more recent papers (2020-2025)</li>
+<li>[ ] Identify exact commercial products (if any)</li>
+<li>[ ] Deep dive into DAIC-WOZ dataset structure</li>
+<li>[ ] Review AVEC challenge winning approaches</li>
+<li>[ ] Explore UK-specific research/applications</li>
+</ol>
+<hr />
+<h2>References (BibTeX to compile)</h2>
+<pre><code>@inproceedings{gratch2014distress,
+  title={The distress analysis interview corpus of human and computer interviews},
+  author={Gratch, Jonathan and Artstein, Ron and Lucas, Gale M and Stratou, Giota and Scherer, Stefan and Nazarian, Angela and Wood, Rachel and Boberg, Jill and DeVault, David and Marsella, Stacy and others},
+  booktitle={Proceedings of LREC},
+  pages={3123--3128},
+  year={2014}
+}
+
+@inproceedings{devault2014simsensei,
+  title={SimSensei kiosk: A virtual human interviewer for healthcare decision support},
+  author={DeVault, David and Artstein, Ron and Benn, Grace and others},
+  booktitle={Proceedings of AAMAS},
+  year={2014}
+}
+
+@inproceedings{ringeval2019avec,
+  title={AVEC 2019 workshop and challenge: state-of-mind, detecting depression with AI, and cross-cultural affect recognition},
+  author={Ringeval, Fabien and Schuller, Björn and Valstar, Michel and others},
+  booktitle={Proceedings of AVEC},
+  pages={3--12},
+  year={2019}
+}
+</code></pre></body></html>

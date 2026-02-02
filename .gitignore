@@ -1,0 +1,50 @@
+# Large data files (3.69GB audio corpus)
+data/Androids-Corpus/
+data/Androids-Corpus.zip
+data/androids_corpus/
+data/__MACOSX/
+data/*.wav
+data/*.mp3
+*.zip
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.Python
+env/
+venv/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Node modules
+node_modules/

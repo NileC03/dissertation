@@ -1,0 +1,296 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>07_dissertation_outline</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; color: #333; }
+h1 { font-size: 28px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+h2 { font-size: 22px; color: #444; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+h3 { font-size: 18px; color: #555; }
+code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: Monaco, monospace; font-size: 13px; }
+pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #f0f0f0; font-weight: 600; }
+tr:nth-child(even) { background: #fafafa; }
+blockquote { border-left: 4px solid #ddd; margin: 0; padding-left: 20px; color: #666; font-style: italic; }
+hr { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
+a { color: #0066cc; }
+strong { color: #111; }
+@media print { body { max-width: none; margin: 0; } }
+</style>
+</head><body><h1>Dissertation Outline: Identifying Depression Through Speech</h1>
+<p><strong>Draft 1 - February 2026</strong></p>
+<hr />
+<h2>Abstract (~200 words)</h2>
+<p><em>Write last - follows formula: Motivate → Aims → Describe → Results</em></p>
+<blockquote>
+<p>Depression affects X% of the global population, yet only one-third receive treatment in high-income countries. This project investigated [APPROACH] to automatically detect depression from speech. [METHODS]. [KEY FINDINGS].</p>
+</blockquote>
+<hr />
+<h2>1. Introduction (3-4 pages)</h2>
+<h3>1.1 Motivation</h3>
+<ul>
+<li>Depression is a major global health challenge</li>
+<li>332 million people affected worldwide (WHO)</li>
+<li>5.7% of adults globally</li>
+<li>1.5x more common in women</li>
+<li>Leading cause of disability worldwide</li>
+<li><strong>The treatment gap</strong>: Only ~1/3 receive treatment even in wealthy countries</li>
+<li>Stigma, access barriers, shortage of mental health professionals</li>
+<li>Diagnosis relies on subjective self-report</li>
+<li><strong>The need for objective markers</strong></li>
+<li>Physical conditions have blood tests, imaging, etc.</li>
+<li>Mental health lacks objective biomarkers</li>
+<li>Speech may contain measurable indicators</li>
+</ul>
+<h3>1.2 Research Questions</h3>
+<p>[To be refined based on chosen approach]
+- RQ1: What speech features are most indicative of depression?
+- RQ2: How accurately can depression be detected from speech alone?
+- RQ3: [Additional question based on angle]</p>
+<h3>1.3 Contributions</h3>
+<ul>
+<li>[What this dissertation adds to the field]</li>
+</ul>
+<h3>1.4 Outline</h3>
+<p>Brief description of each chapter</p>
+<hr />
+<h2>2. Background (8-10 pages)</h2>
+<h3>2.1 Depression: Clinical Context</h3>
+<ul>
+<li>What is depression (clinical definition, DSM-5/ICD-11 criteria)</li>
+<li>Symptoms and severity levels</li>
+<li>Current diagnostic methods (clinical interview, PHQ-8/PHQ-9, BDI)</li>
+<li>UK context and healthcare implications</li>
+</ul>
+<h3>2.2 Speech and Depression</h3>
+<ul>
+<li>Why speech? The neurophysiological connection</li>
+<li>Observed changes in depressed speech (clinical literature)</li>
+<li>Reduced pitch variability (monotone)</li>
+<li>Slower speech rate</li>
+<li>Longer/more frequent pauses</li>
+<li>Reduced energy/volume</li>
+<li>Changes in voice quality</li>
+</ul>
+<h3>2.3 What is Speech? (Formal Definition)</h3>
+<p><em>Per advisor guidance - be formal</em>
+- Acoustic signal fundamentals
+- Time domain vs frequency domain
+- Key properties: pitch (F0), formants, energy</p>
+<h3>2.4 Speech Feature Extraction</h3>
+<ul>
+<li>Low-level descriptors (LLDs)</li>
+<li>Prosodic features (pitch, energy, duration)</li>
+<li>Spectral features (MFCCs, formants)</li>
+<li>Voice quality (jitter, shimmer, HNR)</li>
+<li>High-level features and functionals</li>
+<li>Modern representations (Wav2Vec 2.0, HuBERT)</li>
+</ul>
+<h3>2.5 Machine Learning Approaches</h3>
+<ul>
+<li>Traditional ML (SVM, Random Forest)</li>
+<li>Deep learning (CNNs, RNNs/LSTMs, Transformers)</li>
+<li>Multimodal approaches (audio + text + video)</li>
+</ul>
+<h3>2.6 Existing Work</h3>
+<ul>
+<li>AVEC Challenge series (2016, 2019) - key benchmark</li>
+<li>State-of-the-art results on DAIC-WOZ</li>
+<li>Commercial efforts (if any exist)</li>
+<li>Limitations of existing approaches</li>
+</ul>
+<h3>2.7 Summary</h3>
+<ul>
+<li>What has been done</li>
+<li>What gaps remain</li>
+<li>How this project addresses them</li>
+</ul>
+<hr />
+<h2>3. Analysis/Requirements (4-5 pages)</h2>
+<p><em>What is the problem? How did you arrive at it?</em></p>
+<h3>3.1 Problem Statement</h3>
+<ul>
+<li>Specific, constrained version of the general problem</li>
+<li>Why this particular formulation?</li>
+</ul>
+<h3>3.2 Dataset Selection</h3>
+<ul>
+<li>Why DAIC-WOZ / [chosen dataset]</li>
+<li>Data characteristics</li>
+<li>Train/validation/test splits</li>
+<li>Ethical considerations</li>
+</ul>
+<h3>3.3 Evaluation Metrics</h3>
+<ul>
+<li>Why CCC (Concordance Correlation Coefficient)?</li>
+<li>Other metrics: MAE, RMSE, F1 (if classification)</li>
+<li>Baseline comparisons</li>
+</ul>
+<h3>3.4 Requirements</h3>
+<ul>
+<li>Functional: what must the system do?</li>
+<li>Non-functional: performance, interpretability, etc.</li>
+</ul>
+<hr />
+<h2>4. Design (5-6 pages)</h2>
+<p><em>Abstract approach - could be implemented in any language/framework</em></p>
+<h3>4.1 System Architecture</h3>
+<ul>
+<li>High-level pipeline diagram</li>
+<li>Data flow: audio → features → model → prediction</li>
+</ul>
+<h3>4.2 Feature Extraction Design</h3>
+<ul>
+<li>Which features and why</li>
+<li>Extraction parameters</li>
+</ul>
+<h3>4.3 Model Architecture</h3>
+<ul>
+<li>Architecture choice and justification</li>
+<li>Hyperparameter considerations</li>
+</ul>
+<h3>4.4 Training Strategy</h3>
+<ul>
+<li>Loss function</li>
+<li>Optimization approach</li>
+<li>Regularization</li>
+</ul>
+<hr />
+<h2>5. Implementation (5-6 pages)</h2>
+<p><em>Specific technical details</em></p>
+<h3>5.1 Development Environment</h3>
+<ul>
+<li>Language, frameworks, libraries</li>
+<li>Hardware (if relevant)</li>
+</ul>
+<h3>5.2 Data Preprocessing</h3>
+<ul>
+<li>Audio processing pipeline</li>
+<li>Feature extraction implementation</li>
+</ul>
+<h3>5.3 Model Implementation</h3>
+<ul>
+<li>Architecture details</li>
+<li>Training procedure</li>
+</ul>
+<h3>5.4 Challenges Encountered</h3>
+<ul>
+<li>Technical issues and solutions</li>
+</ul>
+<hr />
+<h2>6. Evaluation (6-8 pages)</h2>
+<p><em>Critical section - evidence-based assessment</em></p>
+<h3>6.1 Experimental Setup</h3>
+<ul>
+<li>Reproducible description of experiments</li>
+<li>Cross-validation strategy</li>
+</ul>
+<h3>6.2 Results</h3>
+<ul>
+<li>Performance metrics with uncertainty</li>
+<li>Comparison to baselines</li>
+<li>Visualizations (Box plots, learning curves, etc.)</li>
+</ul>
+<h3>6.3 Analysis</h3>
+<ul>
+<li>Which features/components contribute most?</li>
+<li>Error analysis</li>
+<li>Statistical significance tests</li>
+</ul>
+<h3>6.4 Discussion</h3>
+<ul>
+<li>Interpretation of results</li>
+<li>Comparison to existing work</li>
+<li>Limitations and caveats</li>
+<li><strong>Be fair and honest</strong> - not trying to prove it's amazing</li>
+</ul>
+<hr />
+<h2>7. Conclusion (2-3 pages)</h2>
+<h3>7.1 Summary</h3>
+<ul>
+<li>What was the problem?</li>
+<li>What did you do?</li>
+<li>What did you find?</li>
+</ul>
+<h3>7.2 Reflection</h3>
+<ul>
+<li>What went well?</li>
+<li>What would you do differently?</li>
+</ul>
+<h3>7.3 Future Work</h3>
+<ul>
+<li>Where could this go next?</li>
+<li>(Don't get credit for things not done, but show vision)</li>
+</ul>
+<hr />
+<h2>Appendices</h2>
+<ul>
+<li>A. Ethics Checklist (if applicable)</li>
+<li>B. Dataset Details</li>
+<li>C. Additional Results/Figures</li>
+<li>D. Code Structure / README</li>
+</ul>
+<hr />
+<h2>Bibliography</h2>
+<p>Harvard style (agsm) - managed via BibTeX</p>
+<p>Key categories:
+- Clinical psychology / psychiatry (depression literature)
+- Speech processing / phonetics
+- Machine learning
+- AVEC challenges and DAIC-WOZ papers
+- UK health statistics</p>
+<hr />
+<h2>Page Budget (~40 pages)</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Estimated Pages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Introduction</td>
+<td>3-4</td>
+</tr>
+<tr>
+<td>Background</td>
+<td>8-10</td>
+</tr>
+<tr>
+<td>Analysis/Requirements</td>
+<td>4-5</td>
+</tr>
+<tr>
+<td>Design</td>
+<td>5-6</td>
+</tr>
+<tr>
+<td>Implementation</td>
+<td>5-6</td>
+</tr>
+<tr>
+<td>Evaluation</td>
+<td>6-8</td>
+</tr>
+<tr>
+<td>Conclusion</td>
+<td>2-3</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>33-42</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Writing Order (recommended)</h2>
+<ol>
+<li><strong>Background</strong> - you know this from research</li>
+<li><strong>Design/Implementation</strong> - document what you built</li>
+<li><strong>Evaluation</strong> - present results</li>
+<li><strong>Analysis</strong> - explain your choices</li>
+<li><strong>Conclusion</strong> - summarize</li>
+<li><strong>Introduction</strong> - frame everything (write last!)</li>
+<li><strong>Abstract</strong> - distill it all (write very last!)</li>
+</ol></body></html>

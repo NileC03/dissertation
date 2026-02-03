@@ -199,6 +199,8 @@ To determine whether the accuracy difference between reading and interview tasks
 
 The null hypothesis is that reading and interview tasks yield equal classification accuracy. A p-value below 0.05 is taken as evidence to reject this null hypothesis, indicating a significant difference.
 
+Note: The z-test assumes independent samples, which is a simplification given that some speakers appear in both tasks. However, the recordings themselves are distinct, and the highly significant p-value (0.0055) suggests the conclusion is robust to this assumption.
+
 ### Feature Importance Analysis
 
 Two complementary importance measures are computed:

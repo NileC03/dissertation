@@ -1,210 +1,241 @@
 \chapter{Methodology}
 
-This chapter details the experimental methodology employed in this study. It covers the research approach, data selection, feature extraction process, classification methods, and evaluation strategy.
+This chapter details the experimental methodology employed in this study, with emphasis on the reasoning behind each methodological choice.
 
 \section{Research Approach}
 
-This study adopts an empirical, quantitative approach to investigate which acoustic features of speech are most predictive of depression, with a particular focus on comparing read versus spontaneous speech modalities. The experimental design follows a supervised machine learning paradigm:
+This study adopts an empirical, quantitative approach to investigate which acoustic features of speech are most predictive of depression, with particular focus on comparing read versus spontaneous speech modalities.
+
+\subsection{Experimental Design}
+
+The experimental pipeline follows four stages:
 
 \begin{enumerate}
-    \item Extract standardised acoustic features from speech recordings
-    \item Train classification models to distinguish depressed from healthy individuals
-    \item Analyse feature importance to identify the most predictive acoustic markers
-    \item Compare results across speech tasks (reading versus interview)
+    \item \textbf{Extract standardised acoustic features} from speech recordings
+    \item \textbf{Train classification models} to distinguish depressed from healthy individuals
+    \item \textbf{Analyse feature importance} to identify the most predictive acoustic markers
+    \item \textbf{Compare results across speech tasks} (reading versus interview)
 \end{enumerate}
 
-This approach was chosen over deep learning methods specifically because the research question centres on \textit{interpretability}—understanding which features contribute to depression detection—rather than maximising classification accuracy alone. While neural network approaches have achieved higher accuracy in some studies \cite{cummins2015review}, their ``black box'' nature makes clinical interpretation difficult.
+This ordering is deliberate. Feature extraction must precede classification (obvious), but the decision to train classifiers \textit{before} analysing features---rather than examining raw feature distributions first---reflects the research question's focus on \textit{predictive} importance. A feature might differ statistically between groups yet contribute little to classification; conversely, features may be predictive through complex interactions invisible in univariate analysis. Training classifiers first identifies what actually matters for prediction.
+
+\subsection{Why Traditional ML Over Deep Learning?}
+
+An alternative approach would use deep learning, which has achieved higher accuracy in recent work. This was deliberately rejected for two reasons.
+
+First, the research question centres on \textit{interpretability}---understanding which features contribute to detection---rather than maximising classification accuracy. Neural networks learn opaque representations that resist interpretation, defeating the study's purpose.
+
+Second, the dataset size (228 recordings) is modest for deep learning, which typically requires thousands of samples to avoid overfitting. Traditional methods are better suited to this scale.
 
 \section{Dataset Selection}
 
 \subsection{The ANDROIDS Corpus}
 
-The ANDROIDS (ANDRoid corpus fOr Identification of Depression and Suicide risk) corpus \cite{dinkel2019androids} was selected for this study. It contains speech recordings from 118 Italian speakers, comprising both individuals with clinical depression diagnoses and healthy controls.
+The ANDROIDS corpus was selected after considering alternatives including DAIC-WOZ (the field's primary benchmark) and E-DAIC. ANDROIDS offers three critical advantages for this research.
 
-\subsubsection{Corpus Characteristics}
+\paragraph{Clinical labels} Unlike DAIC-WOZ, which uses PHQ-8 self-report scores, ANDROIDS labels are based on psychiatric assessment. Self-report introduces noise from response biases and varying interpretation of questions; clinical diagnosis, while not perfect, provides more reliable ground truth.
+
+\paragraph{Dual speech tasks} ANDROIDS includes both reading and interview tasks from the same participants---the only publicly available corpus with this property. This enables direct comparison of how depression manifests across speech modalities, which is central to the research question. DAIC-WOZ contains only spontaneous speech, making such comparison impossible.
+
+\paragraph{Public availability} ANDROIDS is freely accessible, enabling reproducibility. DAIC-WOZ requires application and approval, limiting accessibility.
+
+\subsection{Corpus Composition}
+
+The corpus contains 228 recordings from 118 speakers:
 
 \begin{table}[h]
 \centering
-\caption{ANDROIDS corpus composition}
-\label{tab:corpus-composition}
-\begin{tabular}{lcccc}
+\caption{ANDROIDS corpus composition (recordings per group)}
+\label{tab:corpus}
+\begin{tabular}{lcc}
 \hline
-\textbf{Group} & \textbf{Reading} & \textbf{Interview} & \textbf{Total} \\
+\textbf{Group} & \textbf{Reading Task} & \textbf{Interview Task} \\
 \hline
-Healthy Controls (HC) & 54 & 52 & 106 \\
-Patients (PT) & 58 & 64 & 122 \\
-\textbf{Total} & 112 & 116 & 228 \\
+Healthy Controls (HC) & 54 & 52 \\
+Patients (PT) & 58 & 64 \\
+\textbf{Total recordings} & 112 & 116 \\
 \hline
 \end{tabular}
 \end{table}
 
-Key advantages of this corpus for the current study:
+Note: The totals represent individual recordings, not unique participants. Some participants completed both tasks, meaning there is overlap between task groups. This has implications for cross-validation, discussed below.
 
-\begin{itemize}
-    \item \textbf{Dual speech tasks:} Includes both reading and interview recordings from the same participants, enabling direct comparison of speech modalities
-    \item \textbf{Clinical diagnoses:} Depression labels are based on psychiatric assessment, not self-report questionnaires
-    \item \textbf{Public availability:} Enables reproducibility of results
-    \item \textbf{Controlled recording conditions:} Minimises acoustic variation from environmental factors
-\end{itemize}
+\subsection{Class Balance}
 
-\subsubsection{Speech Tasks}
+The class distribution is approximately balanced: 48\% HC vs 52\% PT for reading, and 45\% HC vs 55\% PT for interview. This mild imbalance does not warrant corrective measures (e.g., SMOTE, class weighting). Such techniques can introduce artefacts and are typically reserved for severe imbalance (e.g., 10:1 ratios). The natural class distribution was preserved.
 
-The corpus contains two distinct speech tasks:
+\subsection{Speech Tasks}
 
-\paragraph{Reading Task:} Participants read a standardised Italian text passage aloud. This provides controlled linguistic content, allowing acoustic analysis independent of spontaneous language production processes.
+\paragraph{Reading Task} Participants read a standardised Italian text passage aloud. This provides controlled linguistic content, allowing acoustic analysis independent of spontaneous language production processes. The cognitive demands are relatively low: text is provided, eliminating lexical retrieval and syntactic planning.
 
-\paragraph{Interview Task:} Participants engaged in semi-structured interviews covering topics such as daily routines, emotional experiences, and future plans. This elicits naturalistic speech with variable linguistic content.
+\paragraph{Interview Task} Participants engaged in semi-structured interviews covering topics such as daily routines, emotional experiences, and future plans. This elicits naturalistic speech with variable linguistic content. The cognitive demands are substantially higher: speakers must simultaneously plan content, retrieve words, construct syntax, and monitor output.
 
-The inclusion of both tasks is central to the research question, as the cognitive demands of reading versus spontaneous speech differ substantially, and these may interact differently with depression-related speech patterns.
+The inclusion of both tasks is central to the research question. If the same features are predictive across both tasks, this suggests task-independent depression markers. If different features dominate, this reveals how task demands interact with depression's effects on speech.
 
 \subsection{Ethical Considerations}
 
 The ANDROIDS corpus is publicly available for research purposes. All recordings were collected with informed consent, and data are anonymised. No additional ethics approval was required for this secondary analysis of existing data.
 
+\section{Data Preprocessing}
+
+\subsection{Audio Format}
+
+The ANDROIDS corpus provides recordings in WAV format at 16kHz sampling rate, 16-bit depth. This format was used directly without resampling or format conversion. The 16kHz rate is standard for speech analysis and provides adequate frequency resolution for the features extracted.
+
+\subsection{Preprocessing Steps}
+
+Minimal preprocessing was applied:
+
+\paragraph{No silence trimming} The openSMILE eGeMAPS configuration handles variable-length input natively and is robust to leading/trailing silence. Manual trimming risks removing relevant speech-adjacent pauses.
+
+\paragraph{No amplitude normalisation} Per-recording normalisation would obscure loudness differences between speakers that may be diagnostically relevant. The eGeMAPS loudness features are computed relative to within-recording dynamics, making cross-recording normalisation unnecessary.
+
+\paragraph{No noise reduction} The corpus was recorded under controlled conditions with consistent equipment. Applying noise reduction risks introducing artefacts and removing signal components.
+
+This minimal-preprocessing approach aligns with the goal of analysing natural speech characteristics rather than cleaned signals.
+
 \section{Feature Extraction}
 
 \subsection{The eGeMAPS Feature Set}
 
-Acoustic features were extracted using the extended Geneva Minimalistic Acoustic Parameter Set (eGeMAPS) \cite{eyben2016geneva}, a standardised feature set designed specifically for affective computing and clinical speech analysis. The eGeMAPS set was chosen for several reasons:
+The extended Geneva Minimalistic Acoustic Parameter Set (eGeMAPS) \cite{Eyben2016} was selected over alternatives (ComParE's 6,000+ features, custom feature sets) for several reasons:
 
-\begin{enumerate}
-    \item \textbf{Standardisation:} Enables comparison with published literature using the same features
-    \item \textbf{Interpretability:} Features have clear acoustic and physiological interpretations
-    \item \textbf{Comprehensiveness:} Covers prosody, voice quality, spectral characteristics, and temporal dynamics
-    \item \textbf{Manageable dimensionality:} 88 features provide rich representation without excessive complexity
-\end{enumerate}
+\paragraph{Interpretability} Each of the 88 features has a defined acoustic meaning. This is essential for a study asking \textit{which} features matter---opaque or composite features would defeat the purpose.
+
+\paragraph{Standardisation} eGeMAPS is widely used in affective computing, enabling comparison with published literature. Using a custom feature set would limit comparability.
+
+\paragraph{Dimensionality} With 88 features and $\sim$115 samples per task, the feature-to-sample ratio is manageable. ComParE's 6,000+ features would require aggressive dimensionality reduction, complicating interpretation.
+
+\paragraph{Design purpose} eGeMAPS was specifically designed for affective computing and clinical speech analysis, not speech recognition. Features were selected based on their relevance to paralinguistic information.
 
 \subsection{Feature Categories}
 
-The 88 eGeMAPS features span several acoustic domains:
+The 88 features span five domains:
 
-\begin{table}[h]
-\centering
-\caption{eGeMAPS feature categories}
-\label{tab:feature-categories}
-\begin{tabular}{lp{7cm}}
-\hline
-\textbf{Category} & \textbf{Features} \\
-\hline
-Frequency (F0) & Pitch mean, standard deviation, percentiles, slopes \\
-Energy/Loudness & Mean loudness, peak rate, slopes, percentiles \\
-Spectral & MFCCs (1-4), spectral flux, formant frequencies, bandwidth \\
-Voice Quality & Jitter, shimmer, Hammarberg index, alpha ratio \\
-Temporal & Voiced/unvoiced segment duration, speech rate \\
-\hline
-\end{tabular}
-\end{table}
+\begin{itemize}
+    \item \textbf{Frequency (F0):} Mean, standard deviation, percentiles (20th, 50th, 80th), and slope statistics for fundamental frequency
+    \item \textbf{Energy/Loudness:} Mean loudness, percentiles, peak rate, and rising/falling slope statistics
+    \item \textbf{Spectral:} MFCCs 1-4 (mean and standard deviation), spectral flux, formant frequencies and bandwidths
+    \item \textbf{Voice Quality:} Jitter, shimmer, Hammarberg index, alpha ratio
+    \item \textbf{Temporal:} Voiced/unvoiced segment statistics, speech rate proxies
+\end{itemize}
 
 \subsection{Extraction Process}
 
-Feature extraction was performed using the openSMILE toolkit \cite{eyben2010opensmile} via its Python bindings. For each audio file, the extraction pipeline:
+Feature extraction used openSMILE (v2.5.0) via its Python bindings \cite{Eyben2010}:
 
 \begin{enumerate}
-    \item Loaded the WAV file (16-bit PCM format)
-    \item Applied the eGeMAPS configuration with functional statistics
-    \item Generated a single 88-dimensional feature vector per recording
-    \item Stored features alongside metadata (speaker ID, condition, task)
+    \item Load WAV file (16kHz, 16-bit, as provided in corpus)
+    \item Apply eGeMAPSv02 configuration
+    \item Compute frame-level features (25ms windows, 10ms shift)
+    \item Apply functionals (statistical summaries) over entire recording
+    \item Output: one 88-dimensional vector per recording
 \end{enumerate}
 
-The ``functionals'' level was used, computing statistical summaries (mean, standard deviation, percentiles) over frame-level features across the entire recording. This produces a fixed-length representation regardless of recording duration.
+The ``functionals'' level---computing means, standard deviations, percentiles, and slopes over frame-level features---produces a fixed-length representation regardless of recording duration. This is appropriate for utterance-level classification but loses fine-grained temporal information.
 
 \section{Classification Methods}
 
-Two classification algorithms were employed: Support Vector Machines (SVM) and Random Forest. Both are well-established methods for speech-based depression detection with complementary strengths.
+Two algorithms were employed: Support Vector Machine (SVM) and Random Forest. Both are well-established for speech-based classification and offer complementary strengths.
 
 \subsection{Support Vector Machine}
 
-SVMs find the hyperplane that maximally separates classes in feature space. A radial basis function (RBF) kernel was used to capture nonlinear relationships:
+SVMs find the hyperplane that maximally separates classes in a transformed feature space. An RBF (radial basis function) kernel was used to capture nonlinear relationships.
 
-\begin{equation}
-    K(x_i, x_j) = \exp\left(-\gamma \|x_i - x_j\|^2\right)
-\end{equation}
-
-Feature standardisation (zero mean, unit variance) was applied prior to SVM training, as the RBF kernel is sensitive to feature scales.
-
-\textbf{Hyperparameters:}
+\textbf{Configuration:}
 \begin{itemize}
-    \item Kernel: RBF
-    \item Regularisation (C): 1.0
-    \item Gamma: Scale (1 / (n\_features $\times$ variance))
+    \item Kernel: RBF (Gaussian)
+    \item Regularisation parameter (C): 1.0 (scikit-learn default)
+    \item Gamma: `scale' (1 / (n\_features $\times$ variance), default)
+    \item Feature standardisation: Applied (zero mean, unit variance)
 \end{itemize}
+
+\textbf{Justification for defaults:} The primary goal is feature importance analysis, not classification optimisation. Extensive hyperparameter tuning would risk overfitting to this specific dataset and would not improve feature importance estimates---which are derived from the Random Forest, not the SVM. The SVM serves as a complementary baseline to verify that patterns are not algorithm-specific.
 
 \subsection{Random Forest}
 
-Random Forest constructs an ensemble of decision trees, each trained on a bootstrap sample with random feature subsets. The ensemble averages predictions across trees, reducing overfitting and providing built-in feature importance estimates.
+Random Forest constructs an ensemble of decision trees, each trained on a bootstrap sample with random feature subsets. Predictions are averaged across trees \cite{Breiman2001}.
 
-\textbf{Hyperparameters:}
+\textbf{Configuration:}
 \begin{itemize}
     \item Number of trees: 100
     \item Maximum depth: 10
+    \item Minimum samples per leaf: 1 (default)
     \item Split criterion: Gini impurity
+    \item Random state: 42 (fixed for reproducibility)
 \end{itemize}
 
-The depth limit was imposed to prevent overfitting on the relatively small dataset.
+\textbf{Justification:}
+\begin{itemize}
+    \item \textit{100 trees:} Provides stable importance estimates. Beyond $\sim$100 trees, importance rankings stabilise with diminishing returns.
+    \item \textit{Maximum depth 10:} With $\sim$115 samples per task and 88 features, unlimited depth risks overfitting. Depth 10 allows sufficient expressiveness while constraining complexity. This value was informed by the rule-of-thumb that tree depth should scale with $\log_2(\text{samples})$; $\log_2(115) \approx 7$, so 10 provides some headroom.
+    \item \textit{Default minimum samples:} Not adjusted because depth limiting already controls overfitting.
+\end{itemize}
+
+No grid search or automated hyperparameter tuning was performed. This was a deliberate choice: the goal is stable feature importance estimation, not maximum classification accuracy.
 
 \section{Evaluation Strategy}
 
-\subsection{Cross-Validation}
+\subsection{Cross-Validation Approach}
 
-All results are reported using 5-fold stratified cross-validation. Stratification ensures each fold maintains the same class distribution as the full dataset, important given the mild class imbalance.
+All results use \textbf{5-fold stratified cross-validation}. This choice reflects several considerations:
 
-For each fold:
-\begin{enumerate}
-    \item Train on 80\% of data
-    \item Test on held-out 20\%
-    \item Record accuracy and F1 score
-\end{enumerate}
+\paragraph{Why stratified} Stratification ensures each fold maintains the same class distribution as the full dataset ($\sim$48\% HC, $\sim$52\% PT). With mild imbalance and small sample sizes, unstratified splits could produce folds with skewed distributions.
 
-Final metrics are the mean and standard deviation across folds.
+\paragraph{Why 5 folds} Five folds balance bias and variance for datasets of this size. Fewer folds (e.g., 3) would mean training on too little data ($\sim$67\%), inflating pessimistic bias. More folds (e.g., 10) would reduce test set size to $\sim$12 samples, increasing variance in performance estimates. Five folds, yielding $\sim$92 training and $\sim$23 test samples per fold, is a standard choice for datasets in the 100-500 range.
+
+\paragraph{Speaker overlap consideration} Some participants completed both reading and interview tasks. Within each task, cross-validation splits are made at the recording level. Leave-one-speaker-out cross-validation was considered but rejected: it would yield only $\sim$60 folds with high variance, and the research question compares tasks separately, making cross-task speaker leakage irrelevant. Within each task, recordings are independent (one recording per speaker per task), so speaker leakage does not occur.
 
 \subsection{Evaluation Metrics}
 
-\paragraph{Accuracy:} Proportion of correctly classified samples:
-\begin{equation}
-    \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
-\end{equation}
+\paragraph{Accuracy} The proportion of correctly classified samples.
 
-\paragraph{F1 Score:} Harmonic mean of precision and recall, providing balanced evaluation under class imbalance:
-\begin{equation}
-    F1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
-\end{equation}
+\paragraph{F1 Score} The harmonic mean of precision and recall. Given the mild class imbalance, F1 provides a balanced view of performance on both classes.
+
+\paragraph{Confusion matrices} Provide detailed error breakdowns, enabling analysis of error patterns.
+
+\subsection{Statistical Significance Testing}
+
+To determine whether the accuracy difference between reading and interview tasks is statistically significant, a two-proportion z-test is applied. The null hypothesis is that reading and interview tasks yield equal classification accuracy. A p-value below 0.05 indicates a significant difference.
 
 \subsection{Feature Importance Analysis}
 
-To address the research question of which features are most predictive, two complementary importance measures were computed:
+Two complementary importance measures are computed:
 
-\paragraph{Gini Importance:} Measures the total decrease in node impurity (Gini index) attributable to each feature across all trees in the Random Forest. While computationally efficient, Gini importance can be biased toward high-cardinality features.
+\paragraph{Gini importance} For each feature, sum the decrease in Gini impurity across all splits in all trees. Efficient but can be biased toward high-cardinality features.
 
-\paragraph{Permutation Importance:} Measures the decrease in model accuracy when feature values are randomly shuffled. This provides a more reliable estimate of true predictive value:
+\paragraph{Permutation importance} For each feature, randomly shuffle its values and measure the accuracy decrease. More computationally expensive but provides a more reliable estimate of true predictive value. Ten shuffles per feature are used.
 
-\begin{equation}
-    I_{\text{perm}}(f) = \frac{1}{K} \sum_{k=1}^{K} \left[ \text{Acc}_{\text{original}} - \text{Acc}_{\text{shuffled}}^{(k)} \right]
-\end{equation}
+Permutation importance is treated as the primary measure due to its robustness.
 
-where $K=10$ permutations were used per feature.
+\section{Methodological Limitations}
+
+Several limitations should be acknowledged:
+
+\begin{itemize}
+    \item \textbf{Single corpus:} Results are derived from ANDROIDS alone, an Italian-language corpus. Generalisation to other languages requires validation.
+    \item \textbf{Binary classification:} The healthy/depressed distinction collapses severity variation, limiting clinical applicability.
+    \item \textbf{Recording-level analysis:} Speaker-level effects are not explicitly modelled.
+    \item \textbf{No speaker normalisation:} Features are used without normalising for individual baseline differences.
+\end{itemize}
+
+These limitations are revisited in the Discussion chapter.
 
 \section{Reproducibility}
 
-All code, feature files, and analysis scripts are available in the project repository. The complete analysis pipeline can be reproduced by:
-
-\begin{enumerate}
-    \item Obtaining the ANDROIDS corpus from the original authors
-    \item Running the feature extraction script (\texttt{extract\_features.py})
-    \item Running the analysis script (\texttt{run\_analysis.py})
-\end{enumerate}
-
-Random seeds were fixed for all stochastic processes to ensure reproducibility.
+All code is available in the project repository. Random seeds are fixed for all stochastic processes (random\_state=42) to ensure reproducibility. The ANDROIDS corpus is publicly available from its original authors.
 
 \section{Summary}
 
 This methodology enables systematic investigation of the research question through:
 
 \begin{itemize}
-    \item A carefully selected corpus with both speech modalities
-    \item Standardised, interpretable acoustic features (eGeMAPS)
-    \item Robust classification with established algorithms
-    \item Feature importance analysis for clinical interpretability
-    \item Rigorous cross-validation for reliable performance estimates
+    \item A carefully selected corpus offering both speech modalities and clinical labels
+    \item Standardised, interpretable features (eGeMAPS) with clear acoustic meanings
+    \item Robust classification using established algorithms with justified configurations
+    \item Feature importance analysis using permutation-based measures
+    \item Rigorous cross-validation appropriate to the sample size
+    \item Statistical testing to confirm significance of findings
 \end{itemize}
 
-The following chapter details the implementation of this methodology, including technical specifications and code organisation.
+The following chapter details the implementation of this methodology.

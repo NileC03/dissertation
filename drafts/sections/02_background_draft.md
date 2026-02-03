@@ -1,197 +1,137 @@
-# Background (Draft)
+# Chapter 2: Background
 
-*This is a draft of the Background chapter for your dissertation. LaTeX version also available.*
-
----
-
-This chapter provides the theoretical and technical foundation for the present work.
-
-## 1. Depression: Clinical Overview
-
-### Definition and Prevalence
-
-Major Depressive Disorder (MDD), commonly referred to as depression, is a mental health condition characterised by persistent feelings of sadness, hopelessness, and loss of interest in activities. According to the World Health Organization, depression affects over **280 million people globally**, making it one of the leading causes of disability worldwide.
-
-In the **United Kingdom**, approximately **1 in 6 adults** experiences depression or anxiety in any given week. The economic burden is substantial: depression costs the UK economy an estimated **£105 billion annually** through healthcare costs, lost productivity, and reduced quality of life.
-
-### Current Diagnostic Methods
-
-Depression diagnosis traditionally relies on clinical interviews and standardised questionnaires:
-
-| Instrument | Type | Scoring |
-|------------|------|---------|
-| **PHQ-9/PHQ-8** | Self-report | 0-27 scale, ≥10 = clinical depression |
-| **Beck Depression Inventory** | Self-report | 21 items measuring symptoms |
-| **Hamilton Rating Scale** | Clinician-administered | 17-21 items |
-
-**Limitations of current methods:**
-
-1. **Subjectivity:** Inter-rater reliability between clinicians can be as low as 0.28 kappa
-2. **Self-report bias:** Patients may underreport due to stigma or lack of insight
-3. **Resource requirements:** Requires trained professionals, time-consuming
-4. **Access barriers:** Many lack access to mental health professionals
-
-These limitations motivate the search for **objective, scalable biomarkers**—among which speech has emerged as promising.
+This chapter establishes the theoretical and technical foundations necessary for understanding the present research. It begins by examining the clinical context of depression and its effects on speech production, then explores how these speech changes can be measured through acoustic features, before reviewing existing computational approaches and identifying the gap this work addresses.
 
 ---
 
-## 2. Depression and Speech Production
+## 2.1 Depression and Its Effects on Speech
 
-### The Cognition-Speech Connection
+### The Clinical Context
 
-Speech production is complex, involving planning, motor control, and real-time monitoring. Depression affects multiple cognitive domains that directly influence speech:
+Major Depressive Disorder (MDD) is characterised by persistent feelings of sadness, hopelessness, and diminished interest in activities. Beyond its emotional symptoms, depression profoundly affects cognitive and motor functioning—effects that manifest in observable changes to speech production.
 
-- **Psychomotor retardation:** Slowing of processes → reduced speech rate, longer pauses
-- **Reduced motivation:** Diminished drive → "flat" or monotonous speech
-- **Cognitive load:** Rumination consumes resources → affects fluency
-- **Emotional blunting:** Reduced reactivity → decreased pitch variation
+The neurobiological basis for these speech changes is well-established. Depression is associated with dysfunction in prefrontal cortical regions responsible for executive control, as well as disruption to dopaminergic pathways that regulate motor initiation and reward processing (Sobin & Sackeim, 1997). Psychomotor retardation—the slowing of physical and cognitive processes—is a core feature of melancholic depression, affecting approximately 70% of hospitalised patients. This retardation directly impacts the motor planning and execution required for fluent speech production.
 
-**Crucially, many changes are involuntary**—speakers cannot easily mask them, making speech a potentially robust biomarker.
+At the cognitive level, depression impairs working memory capacity and attentional control (Joormann & Gotlib, 2011). Speech production is a demanding cognitive task: Levelt's (1989) influential model identifies multiple processing stages including conceptualisation, formulation, and articulation, all operating in parallel and requiring continuous monitoring. When cognitive resources are depleted by rumination or slowed by psychomotor retardation, these processes become less efficient, manifesting as increased hesitations, longer pauses, and reduced fluency.
 
-### Observable Speech Changes
+### How Depression Manifests in Speech
 
-| Category | Changes in Depression |
-|----------|----------------------|
-| **Temporal** | Slower speech rate, longer pauses, more hesitations |
-| **Prosodic** | Reduced pitch range, lower mean F0, less variability |
-| **Voice quality** | Increased breathiness, jitter, shimmer |
-| **Articulation** | Less precise consonants, reduced vowel space |
+The observable speech changes in depression can be understood through three interconnected mechanisms.
 
----
+**Prosodic flattening** reflects the emotional blunting characteristic of depression. Healthy emotional expression involves dynamic modulation of pitch, loudness, and timing—what linguists term prosody. Depressed individuals show reduced emotional reactivity (Bylsma et al., 2008), which manifests as diminished prosodic variation: narrower pitch range, reduced loudness dynamics, and more monotonous delivery. Importantly, this flattening appears to be involuntary; speakers cannot easily mask it, making it a potentially robust biomarker.
 
-## 3. Acoustic and Prosodic Features
+**Temporal disruption** arises from psychomotor retardation and cognitive load. The production of spontaneous speech requires real-time lexical retrieval, syntactic planning, and articulatory coordination. When these processes are slowed, the result is increased pause duration, lower speech rate, and more frequent hesitations. Cannizzaro et al. (2004) found that pause-related features were among the strongest acoustic correlates of depression severity.
 
-### Fundamental Frequency (F0)
+**Voice quality changes** reflect alterations to laryngeal function. Depression is associated with increased muscle tension and changes to respiratory control, which affect vocal fold vibration patterns. These changes manifest as increased jitter (cycle-to-cycle pitch variation), shimmer (amplitude variation), and breathiness. Ozdas et al. (2004) demonstrated that voice quality measures could distinguish depressed from non-depressed speakers with reasonable accuracy, though results have been less consistent across studies than prosodic measures.
 
-F0 corresponds to vocal fold vibration rate, perceived as pitch.
-
-**Common F0 features:**
-- Mean F0: average pitch
-- F0 standard deviation: pitch variability
-- F0 range: max - min
-
-*Depressed speakers typically show lower mean F0 and reduced variability.*
-
-### Energy and Intensity
-
-Root Mean Square Energy (RMSE) reflects vocal effort:
-
-```
-RMSE = sqrt(1/N × Σ(x²))
-```
-
-*Depressed speakers show reduced overall energy and dynamic range.*
-
-### Mel-Frequency Cepstral Coefficients (MFCCs)
-
-Spectral features approximating human auditory perception:
-
-1. Compute power spectrum (STFT)
-2. Apply mel-scale filterbank
-3. Take logarithm
-4. Apply Discrete Cosine Transform
-
-Typically 12-13 MFCCs + delta + delta-delta = **39 features**
-
-### Temporal Features
-
-- **Speech rate:** Syllables/phonemes per second
-- **Pause duration:** Length of silent intervals
-- **Speech-to-pause ratio:** Voiced vs unvoiced proportion
-
-### Voice Quality Features
-
-- **Jitter:** Cycle-to-cycle F0 variation
-- **Shimmer:** Cycle-to-cycle amplitude variation
-- **HNR:** Harmonic-to-Noise Ratio (periodic vs aperiodic energy)
-
-*Higher jitter/shimmer, lower HNR = less stable phonation, often observed in depression.*
-
-### Standard Feature Sets
-
-| Feature Set | Features | Purpose |
-|-------------|----------|---------|
-| **eGeMAPS** | 88 | Designed for affective computing |
-| **ComParE** | 6,000+ | Comprehensive paralinguistics |
-
-This work uses **OpenSMILE** following Tao et al.'s protocol for ANDROIDS.
+A critical observation from the literature is that **variability measures often outperform means**. It is not simply that depressed speakers have lower average pitch or speak more slowly; rather, they show reduced *dynamic range*—less variation around whatever their baseline might be. This insight, while present in the clinical literature, has been underexplored in computational approaches that often focus on mean values.
 
 ---
 
-## 4. Machine Learning Approaches
+## 2.2 Acoustic Feature Extraction
 
-### Traditional ML
+### From Speech Signal to Measurable Features
 
-| Method | Strengths | Use in Depression Detection |
-|--------|-----------|----------------------------|
-| **SVM** | Effective with high-dimensional data | Widely used baseline |
-| **Random Forest** | Feature importance built-in | Good interpretability |
-| **Logistic Regression** | Highly interpretable | Coefficient analysis |
+To analyse speech computationally, the raw audio signal must be transformed into a structured representation. This process involves extracting acoustic features—numerical descriptors that capture relevant properties of the speech signal. The choice of features is consequential: different features capture different aspects of speech, and their relevance to depression detection varies.
 
-### Deep Learning
+### Prosodic Features
 
-| Architecture | Strength | Example |
-|--------------|----------|---------|
-| **LSTM** | Temporal dependencies | Tao's baseline |
-| **CNN** | Spectrogram features | Ma et al., 2016 |
-| **Attention** | Focus on relevant segments | Multi-Local Attention |
+**Fundamental frequency (F0)**, corresponding to vocal fold vibration rate and perceived as pitch, is the most studied feature in depression research. F0 is typically extracted using autocorrelation or cepstral methods, producing a time series that can be summarised through statistical functionals: mean, standard deviation, percentiles, and slope measures. The theoretical motivation is clear: F0 variation reflects emotional expressiveness, and reduced variation is a hallmark of depressive flattening.
 
-### Evaluation Metrics
+However, F0-based features have limitations. Extraction algorithms can be unreliable in noisy conditions or with certain voice types, and cross-speaker normalisation is challenging due to large individual differences in baseline pitch. Some researchers argue that F0 variability, while theoretically motivated, has shown inconsistent results precisely because of these measurement challenges (Cummins et al., 2015).
 
-- **Accuracy:** Proportion correct
-- **F1 Score:** Harmonic mean of precision/recall
-- **CCC:** Concordance Correlation Coefficient (regression)
-- **AUC:** Area Under ROC Curve
+**Loudness and energy features** capture vocal intensity and its dynamics. Root mean square energy provides an overall measure, while loudness slope features (both rising and falling) characterise the dynamic envelope of speech. These features are more robust to extraction than F0 but potentially confounded by recording conditions and speaker-microphone distance.
+
+### Spectral Features
+
+**Mel-Frequency Cepstral Coefficients (MFCCs)** are the standard spectral representation in speech processing. The computation involves applying a mel-scaled filterbank to the power spectrum, taking the logarithm, and applying a discrete cosine transform. The resulting coefficients approximate human auditory perception and capture vocal tract configuration.
+
+MFCCs are ubiquitous in speech technology but their relevance to depression detection deserves scrutiny. They were developed for speech recognition, where the goal is capturing phonetic content. For depression detection, their utility is empirical rather than theoretically motivated—they work reasonably well, but it is unclear which aspects of the spectral shape they capture are actually relevant to depressive speech changes. This ambiguity makes interpretation difficult.
+
+**Spectral flux** measures frame-to-frame spectral change, capturing the dynamic modulation of the voice. Unlike MFCCs, which describe static spectral shape, spectral flux characterises how that shape evolves over time. This may be more directly relevant to the reduced dynamic variation observed in depression.
+
+**Voice quality features** including the Hammarberg index (ratio of energy below vs above 2kHz) and alpha ratio (similar spectral balance measure) capture characteristics like breathiness and vocal strain. These have clear physiological interpretations related to laryngeal function.
+
+### The eGeMAPS Feature Set
+
+Recognising the proliferation of ad-hoc feature sets in affective computing, Eyben et al. (2016) proposed the extended Geneva Minimalistic Acoustic Parameter Set (eGeMAPS): a standardised set of 88 features designed specifically for affective computing and clinical speech analysis.
+
+The eGeMAPS set was motivated by several considerations. First, **parsimony**: rather than thousands of features requiring aggressive dimensionality reduction, 88 features provide comprehensive coverage while remaining manageable. Second, **interpretability**: each feature has a defined acoustic meaning, unlike the opaque representations learned by neural networks. Third, **standardisation**: using a common feature set enables comparison across studies.
+
+The 88 features span frequency (F0 statistics and dynamics), energy (loudness and its variations), spectral (MFCCs 1-4, spectral flux, formants), and temporal (voiced/unvoiced segment statistics) domains. Functionals—statistical summaries computed over the entire recording—transform frame-level measurements into fixed-length vectors.
+
+This work adopts eGeMAPS for several reasons aligned with the research question. The focus on feature interpretability requires features with clear meanings; eGeMAPS provides this. The goal of identifying *which* features matter requires a manageable set that can be analysed individually; eGeMAPS is sized appropriately. And the use of a standard set enables comparison with prior work on the same corpus.
 
 ---
 
-## 5. Related Work
+## 2.3 Computational Approaches to Depression Detection
 
-### The AVEC Challenges
+### Traditional Machine Learning
 
-AVEC 2016, 2017, 2019 used DAIC-WOZ corpus:
-- Multimodal approaches outperform unimodal
-- Baseline: ~5-6 MAE on PHQ-8
-- Deep learning achieves state-of-the-art
+Early computational work on depression detection employed classical machine learning algorithms with handcrafted features. Support Vector Machines (SVMs) were particularly popular, performing well with high-dimensional feature vectors and limited training data. Random Forests offered the additional advantage of built-in feature importance estimates through Gini impurity or permutation-based measures.
+
+These approaches achieved reasonable accuracy—typically 65-80% on binary classification tasks—while maintaining interpretability. A trained SVM or Random Forest can be interrogated: which features received high weights? Which drove particular predictions? This transparency is valuable for clinical applications where explanations matter.
+
+### Deep Learning Approaches
+
+The deep learning revolution reached depression detection around 2016. Convolutional Neural Networks (CNNs) applied to spectrograms, Recurrent Neural Networks (RNNs) modelling temporal dynamics, and attention mechanisms focusing on relevant speech segments all showed improvements over traditional methods.
+
+Ma et al. (2016) demonstrated that CNNs could learn depression-relevant representations directly from spectrograms, bypassing handcrafted features entirely. Subsequent work, including Tao et al.'s Multi-Local Attention approach, achieved state-of-the-art results on benchmark datasets.
+
+However, these improvements came at a cost. Neural networks are notoriously difficult to interpret. While post-hoc explanation methods like SHAP and attention visualisation offer some insight, they do not provide the direct feature-level understanding that traditional methods afford. For a researcher asking "which acoustic properties of speech are affected by depression?", a neural network's answer is unsatisfyingly opaque.
+
+This trade-off between accuracy and interpretability is central to the present work. The question is not simply "can we detect depression?" but "what can detection tell us about how depression affects speech?"
+
+---
+
+## 2.4 Related Work and Datasets
+
+### The AVEC Challenge Series
+
+The Audio/Visual Emotion Challenge (AVEC) series established benchmarks for affective computing, including depression detection. AVEC 2016, 2017, and 2019 featured depression sub-challenges using the DAIC-WOZ corpus.
+
+Examining the winning approaches reveals important patterns. The 2016 winner combined audio, video, and text modalities, achieving 4.99 MAE on PHQ-8 prediction. Subsequent challenges showed similar trends: multimodal approaches consistently outperformed unimodal ones, often by substantial margins. This raises questions about speech-only approaches: is acoustic information sufficient, or are visual and linguistic cues essential?
+
+The improvement from multimodality is not uniform across features. Analysis of challenge results suggests that acoustic features contribute most to detecting severe depression, while linguistic features (word choice, response patterns) may better capture mild cases. This observation has implications for system design but has received limited attention in the literature.
+
+### The DAIC-WOZ Corpus
+
+The Distress Analysis Interview Corpus (DAIC-WOZ) has been the primary benchmark for depression detection research. It contains clinical interviews with participants who completed PHQ-8 self-report questionnaires.
+
+Despite its influence, DAIC-WOZ has limitations relevant to this work. First, labels are self-reported questionnaire scores, not clinical diagnoses—introducing potential noise from response biases. Second, all speech is spontaneous interview responses; there is no controlled reading task for comparison. Third, access is restricted, limiting reproducibility.
 
 ### The ANDROIDS Corpus
 
-Tao et al. (2023) introduced ANDROIDS addressing key limitations:
+Tao et al. (2023) introduced the ANDROIDS corpus specifically to address limitations in existing datasets. Three features make it particularly suitable for the present research.
 
-| Feature | ANDROIDS | DAIC-WOZ |
-|---------|----------|----------|
-| Labels | Psychiatric diagnosis | PHQ-8 self-report |
-| Speech tasks | Read + Spontaneous | Spontaneous only |
-| Language | Italian | English |
-| Access | Public | Restricted |
+**Clinical labels**: Unlike DAIC-WOZ's self-report scores, ANDROIDS participants were labelled based on psychiatric assessment by clinicians. This provides more reliable ground truth, though the binary healthy/depressed distinction loses severity information.
 
-**Results:** 83.4% accuracy (read), 81.6% (spontaneous)
+**Dual speech tasks**: Critically, ANDROIDS includes both reading and spontaneous interview tasks from the same participants. This enables direct comparison of how depression manifests across speech modalities—a comparison impossible with DAIC-WOZ. Reading provides controlled linguistic content, isolating acoustic characteristics; interviews capture naturalistic speech with all its cognitive demands.
 
-### The Gap: Feature Importance
+**Public availability**: ANDROIDS is freely accessible for research, enabling reproducibility.
 
-Most research focuses on **maximising accuracy** ("black box").
+Tao et al.'s own analysis of ANDROIDS achieved 83.4% accuracy on reading and 81.6% on spontaneous speech using deep learning. However, their focus was on detection accuracy, not feature analysis. They did not systematically investigate which acoustic features drove their model's predictions or whether the same features mattered for both tasks.
 
-**Underexplored:** Which features drive predictions? This is crucial for:
-- Clinical utility (doctors need explanations)
-- Scientific understanding (what changes in depression?)
-- System design (which features to collect?)
+### The Gap: Feature Interpretability
 
-**This dissertation addresses this gap.**
+Surveying the literature reveals a consistent pattern: most work prioritises detection accuracy over understanding. Researchers report overall accuracy, F1 scores, and comparisons to baselines, but rarely analyse *which features* contribute most to predictions or *why*.
+
+This gap exists for understandable reasons. The field has been driven by challenge benchmarks that reward accuracy, not interpretability. Deep learning methods that dominate leaderboards are inherently opaque. And rigorous feature importance analysis requires careful methodology that adds complexity beyond simply training a classifier.
+
+Yet the gap has costs. Clinicians cannot trust systems they do not understand. The scientific goal of understanding depression's effects on speech is not served by black-box predictions. And practical systems cannot be optimised without knowing which features matter.
+
+The ANDROIDS corpus, with its dual tasks and clinical labels, provides an ideal testbed for addressing this gap. By analysing feature importance across reading and spontaneous speech, we can ask: which acoustic features are most predictive of depression? Do the same features matter in controlled versus naturalistic speech? What does this reveal about how depression affects speech production?
 
 ---
 
-## Summary
+## 2.5 Summary
 
-- Depression is prevalent with significant diagnostic challenges
-- Speech offers a non-invasive, scalable biomarker
-- Acoustic features can be formally defined and extracted
-- ML approaches range from SVMs to attention networks
-- **ANDROIDS provides ideal testbed** with professional labels and dual tasks
-- **Gap:** Feature importance analysis remains underexplored
+Depression affects speech through multiple mechanisms: psychomotor retardation disrupts timing, emotional blunting reduces prosodic variation, and altered laryngeal function changes voice quality. These effects can be captured through acoustic features spanning prosodic, spectral, and temporal domains.
 
-The following chapter describes methodology for analysing feature importance.
+Computational approaches have achieved reasonable detection accuracy, with deep learning methods currently dominant. However, the field has prioritised accuracy over interpretability, leaving important questions unanswered about which features drive predictions and why.
+
+The ANDROIDS corpus offers unique advantages for addressing these questions: clinical labels, dual speech tasks, and public availability. This work uses ANDROIDS with interpretable machine learning methods to analyse feature importance, directly addressing the gap in current research.
 
 ---
 
-*Draft version - February 2026*
-*Word count: ~900 (will expand to ~3000 in final)*
+*Word count: ~2,100*

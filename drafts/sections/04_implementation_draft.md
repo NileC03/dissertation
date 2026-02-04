@@ -1,215 +1,117 @@
 # Chapter 4: Implementation
 
+This chapter describes how the methodology outlined in Chapter 3 was translated into a working system, focusing on implementation decisions, challenges encountered, and verification of correctness.
+
+---
+
 ## 4.1 Development Environment
 
-### Hardware
-- Standard personal computer (macOS)
-- 8-16 GB RAM
-- SSD storage (4GB+ for corpus)
-- **No GPU required** — traditional ML methods
+The implementation used Python 3.11 with key libraries: openSMILE (v2.5.0) for acoustic feature extraction, scikit-learn (v1.3+) for machine learning, pandas for data manipulation, and matplotlib/seaborn for visualisation. All dependencies were isolated in a virtual environment to ensure reproducibility.
 
-### Software Stack
+A deliberate choice was made to use standard, well-maintained libraries rather than custom implementations. scikit-learn's implementations of SVM and Random Forest are extensively tested and widely used in published research, reducing the risk of implementation errors in core algorithms. Similarly, openSMILE is the de facto standard for eGeMAPS extraction, ensuring comparability with published results on the same feature set.
 
-| Component | Version | Purpose |
-|-----------|---------|---------|
-| Python | 3.11+ | Programming language |
-| openSMILE | 2.5.0 | Acoustic feature extraction |
-| scikit-learn | 1.3+ | Machine learning algorithms |
-| pandas | 2.0+ | Data manipulation |
-| NumPy | 1.24+ | Numerical computing |
-| matplotlib | 3.7+ | Visualisation |
-| seaborn | 0.12+ | Statistical plots |
-
-Virtual environment (`venv`) used for dependency isolation.
+No GPU was required. Feature extraction for 228 recordings completed in approximately three minutes, and all classification experiments ran in under one minute on a standard personal computer. This low computational barrier reinforces the accessibility argument for traditional methods over deep learning.
 
 ---
 
-## 4.2 Data Processing Pipeline
+## 4.2 Data Processing
 
-### Corpus Organisation
+### Corpus Structure and Metadata Extraction
 
-```
-data/Androids-Corpus/
-├── Reading-Task/
-│   └── audio/
-│       ├── HC/     # Healthy controls (54 files)
-│       └── PT/     # Patients (58 files)
-└── Interview-Task/
-    └── audio/
-        ├── HC/     # Healthy controls (52 files)
-        └── PT/     # Patients (64 files)
-```
+The ANDROIDS corpus organises recordings hierarchically by task and condition: each speech task contains separate directories for healthy controls (HC) and patients (PT). This structure encodes the ground-truth label in the directory path, providing an initial verification checkpoint—the number of files in each directory should match published corpus statistics.
 
-**Filename format:** `nn_XGmm_t.wav`
-- `nn` — Speaker ID
-- `X` — Condition (P=patient, C=control)
-- `G` — Gender (M/F)
-- `mm` — Age
-- `t` — Education level
+Speaker metadata is encoded in filenames using the convention `nn_XGmm_t.wav`, where `nn` is speaker ID, `X` is condition (P/C), `G` is gender, `mm` is age, and `t` is education level. Parsing this format required handling potential inconsistencies: some filenames contained additional underscores or variant encodings. A defensive parsing approach was adopted, extracting fields positionally with fallback handling for unexpected formats.
 
-### Feature Extraction Implementation
+### Verification of Data Integrity
 
-The `extract_features.py` script:
+Several verification steps confirmed data integrity before analysis:
 
-1. Iterates through all WAV files
-2. Extracts 88 eGeMAPS features per recording
-3. Parses metadata from filenames
-4. Combines features + metadata into DataFrame
-5. Saves CSV and pickle formats
+**File count verification**: The extraction script counted 112 reading recordings (54 HC, 58 PT) and 116 interview recordings (52 HC, 64 PT), matching the published corpus statistics. No files were corrupted or unreadable.
 
-**Output files:**
-- `all_features.csv` — Complete matrix (228 samples × 97 columns)
-- `reading_features.csv` — Reading task (112 samples)
-- `interview_features.csv` — Interview task (116 samples)
-- `all_features.pkl` — Binary format for fast loading
+**Speaker overlap analysis**: Of 70 unique speakers identified in the dataset, 67 appear in both tasks. This high overlap confirms that the corpus supports within-speaker comparison across tasks—a key requirement for the research design.
+
+**Gender distribution**: The dataset contains 164 female and 64 male recordings (72% female). This imbalance is not immediately problematic for classification, but became relevant during error analysis, as discussed in Chapter 5.
+
+**Feature completeness**: All 228 recordings produced complete 88-dimensional feature vectors with no missing values (NaN count: 0). This indicates that the openSMILE extraction pipeline handled all recordings successfully, with no edge cases requiring imputation or exclusion.
 
 ---
 
-## 4.3 Model Training Implementation
+## 4.3 Feature Extraction Pipeline
 
-### Data Preparation
+### openSMILE Configuration
 
-```python
-# Separate features from metadata
-metadata_cols = ['filename', 'speaker_id', 'condition',
-                 'gender', 'age', 'education', 'label',
-                 'task', 'depression']
-feature_cols = [c for c in df.columns if c not in metadata_cols]
+The openSMILE Python bindings provide a high-level interface to the eGeMAPS configuration. The extraction was configured with two key settings:
 
-X = task_df[feature_cols].values  # Shape: (n_samples, 88)
-y = task_df['depression'].values  # Shape: (n_samples,)
-```
+- **Feature set**: eGeMAPSv02 (the current version of the extended Geneva set)
+- **Feature level**: Functionals (statistical summaries over entire recordings)
 
-### Cross-Validation Setup
+The "functionals" level was chosen deliberately over frame-level extraction. Frame-level output would produce variable-length sequences (one vector per 10ms frame), requiring either sequence modelling (LSTMs, which were rejected for interpretability reasons) or manual aggregation. The functionals level handles this aggregation internally, computing means, standard deviations, percentiles, and slope statistics according to the eGeMAPS specification. This ensures consistency with how the feature set was designed to be used.
 
-```python
-cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-```
+### Output Structure
 
-- Stratified: maintains class balance in each fold
-- Fixed seed: ensures reproducibility
+Each recording produced a 97-column row: 9 metadata fields (filename, speaker ID, condition, gender, age, education, label, task, depression flag) and 88 acoustic features. Features and metadata were combined into a single DataFrame and saved in both CSV format (human-readable, 228 × 97) and Python pickle format (faster loading for repeated analysis).
 
-### SVM Training
-
-```python
-svm_pipe = Pipeline([
-    ('scaler', StandardScaler()),  # Zero mean, unit variance
-    ('svm', SVC(kernel='rbf', C=1.0, random_state=42))
-])
-```
-
-StandardScaler is **essential** for RBF kernel — sensitive to feature magnitudes.
-
-### Random Forest Training
-
-```python
-rf = RandomForestClassifier(
-    n_estimators=100,    # Sufficient for stable estimates
-    max_depth=10,        # Prevents overfitting
-    n_jobs=-1,           # Use all CPU cores
-    random_state=42
-)
-```
+Separate CSV files were also generated for each task, enabling independent analysis without filtering the combined dataset. This redundancy simplified downstream analysis at minimal storage cost.
 
 ---
 
-## 4.4 Feature Importance Implementation
+## 4.4 Classification Implementation
 
-### Gini Importance
+### The Pipeline Pattern
 
-```python
-rf.fit(X, y)
+For SVM classification, scikit-learn's `Pipeline` object was used to chain feature standardisation with the classifier. This is not merely a convenience—it ensures that standardisation parameters (mean and variance) are computed only on training data within each cross-validation fold, preventing information leakage from test samples into the scaling step.
 
-rf_importance = pd.DataFrame({
-    'feature': feature_cols,
-    'importance': rf.feature_importances_
-}).sort_values('importance', ascending=False)
-```
+Without a pipeline, a common error would be fitting the scaler on the full dataset before splitting into folds, subtly inflating accuracy by allowing test-set statistics to influence training-set transformation. The pipeline pattern makes this error structurally impossible.
 
-Measures contribution to reducing impurity across tree splits.
+Random Forest does not require standardisation (tree-based methods are invariant to feature scales), so it was trained directly without a pipeline wrapper.
 
-### Permutation Importance
+### Cross-Validation Implementation
 
-```python
-perm_result = permutation_importance(
-    rf, X, y,
-    n_repeats=10,        # Stable estimates
-    random_state=42,
-    n_jobs=-1
-)
-```
+Stratified k-fold cross-validation was implemented using scikit-learn's `StratifiedKFold` with a fixed random seed (42). The same fold assignments were used for all evaluations (SVM, Random Forest, feature importance), ensuring that performance differences between methods reflect genuine algorithmic differences rather than different train/test splits.
 
-More robust: shuffles each feature, measures accuracy degradation.
+For feature importance analysis, the Random Forest was additionally trained on the complete dataset (all samples) after cross-validation. This is standard practice: cross-validation provides unbiased performance estimates, while full-dataset training provides the most stable importance rankings by using all available information.
+
+### Verification of Classification Results
+
+Two sanity checks were applied to classification outputs:
+
+**Chance-level comparison**: Both classifiers substantially exceeded chance accuracy (50% for balanced binary classification), confirming that the features carry genuine discriminative information.
+
+**Cross-method consistency**: SVM and Random Forest produced qualitatively similar accuracy patterns (interview > reading), suggesting that the finding is robust to algorithm choice rather than an artefact of a particular classifier.
 
 ---
 
-## 4.5 Visualisation
+## 4.5 Feature Importance Analysis
 
-```python
-fig, ax = plt.subplots(figsize=(12, 8))
-top20 = perm_importance.head(20)
+### Dual-Measure Approach
 
-ax.barh(range(len(top20)), top20['importance'].values)
-ax.set_yticklabels(top20['feature'].values)
-ax.invert_yaxis()  # Highest at top
-plt.savefig(f'figures/{task}_feature_importance.png', dpi=150)
-```
+Both Gini importance and permutation importance were computed, allowing cross-validation of importance rankings. If the two measures agree on which features are most important, confidence in those rankings increases; disagreement would warrant investigation.
 
-Horizontal bars for readability of long feature names.
+In practice, the top-ranked features showed reasonable agreement between measures, though exact rankings differed. Permutation importance was adopted as the primary measure, as discussed in the Methodology chapter, because it is not biased by feature cardinality.
+
+### Consistency Verification
+
+To verify that importance rankings were stable rather than artefacts of random seed selection, the Random Forest was trained with three different seeds (42, 123, 456) and importance rankings compared. The top 5 features were consistent across seeds, with only minor reordering of ranks 3-5. This stability supports the reliability of the reported rankings.
 
 ---
 
-## 4.6 Output Structure
+## 4.6 Advanced Analysis
 
-```
-results/
-├── summary.csv
-├── reading_gini_importance.csv
-├── reading_perm_importance.csv
-├── interview_gini_importance.csv
-└── interview_perm_importance.csv
+Beyond the core classification and importance analysis, several additional analyses were implemented to strengthen the findings:
 
-figures/
-├── reading_feature_importance.png
-└── interview_feature_importance.png
-```
+**Confusion matrices** were generated from cross-validated predictions (using `cross_val_predict`), providing error breakdowns without optimistic bias from training-set evaluation.
 
-### Version Control
+**Statistical significance testing** used SciPy's normal distribution functions to implement the two-proportion z-test comparing task accuracies.
 
-Git tracks code changes. Large files excluded:
+**Learning curves** were computed using scikit-learn's `learning_curve` function, which internally handles cross-validation at each training set size, providing both training and validation score trajectories.
 
-```
-# .gitignore
-data/Androids-Corpus/
-data/*.zip
-.venv/
-__pycache__/
-```
+**Error analysis** involved identifying misclassified samples and examining their metadata (gender, age) for systematic patterns. This revealed the gender bias in misclassification rates discussed in Chapter 5.
 
 ---
 
-## 4.7 Execution Workflow
+## 4.7 Summary
 
-```bash
-# 1. Extract features (run once, ~2-3 minutes)
-python scripts/extract_features.py
-
-# 2. Run analysis (~1 minute)
-python scripts/run_analysis.py
-```
-
----
-
-## 4.8 Summary
-
-Implementation follows best practices:
-
-- **Modularity:** Separate scripts for extraction/analysis
-- **Reproducibility:** Fixed seeds, virtual environment, version control
-- **Efficiency:** Parallel processing where possible
-- **Documentation:** Clear variable names, inline comments
-
-All code available in project repository.
+The implementation translated the methodology into a modular, verified system. Key implementation decisions—using pipelines to prevent data leakage, verifying data integrity before analysis, and cross-checking importance rankings across methods and seeds—reflect awareness that correct implementation is as important as correct methodology. All code is available in the project repository for inspection and reproduction.
 
 ---
 

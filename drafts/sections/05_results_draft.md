@@ -208,7 +208,7 @@ Possible explanations for the remaining difference include:
 2. **Expression differences:** Gender differences in how depression manifests in speech
 3. **Sample characteristics:** Potential confounds in the specific corpus
 
-This finding warrants further investigation but does not undermine the main results.
+This finding warrants further investigation but does not undermine the main results, since both genders show the same pattern of interview speech outperforming reading speech for depression detection.
 
 ### Validation Checks
 
@@ -222,13 +222,19 @@ Two checks confirm the results are not artefactual:
 
 ## 5.6 Visualisations
 
-Figure 5.1 presents the feature importance distributions for both tasks, showing the top 20 features ranked by Gini importance. The steeper decline for interview speech is visible, with the top feature substantially more important than subsequent ones.
+**Figure 5.1: Feature Importance Comparison**
 
-Figure 5.2 shows confusion matrix heatmaps for both tasks, illustrating the improved error balance achieved on interview speech.
+The side-by-side bar charts display the top 10 features for each task ranked by Gini importance. The visual contrast is striking: reading task features show a relatively even distribution (bars of similar length), while interview task features exhibit a steep drop-off after the top few features. Spectral flux variability visually dominates the interview chart, reinforcing its role as the primary predictive feature for spontaneous speech.
 
-Figure 5.3 presents learning curves for Random Forest on both tasks, demonstrating convergence of training and validation scores.
+**Figure 5.2: Confusion Matrices**
 
-*(Note: Figures are located in the figures/advanced/ directory of the project repository.)*
+Heatmaps visualise the classification outcomes for both tasks. The reading task matrix shows moderate off-diagonal values (errors), while the interview task matrix is visually "cleaner"—darker diagonal cells and lighter off-diagonal cells—immediately communicating the improved classification performance.
+
+**Figure 5.3: Learning Curves**
+
+These plots track training and cross-validation accuracy as training set size increases. Both tasks show the characteristic pattern of valid learning: training accuracy starts high and decreases slightly as training size grows, while validation accuracy increases and converges toward the training curve. The gap between curves at maximum training size is modest (~5 percentage points), indicating appropriate generalisation without severe overfitting.
+
+*(Figures are located in the figures/advanced/ directory of the project repository and should be included inline in the final LaTeX compilation.)*
 
 ---
 

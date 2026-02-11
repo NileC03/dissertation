@@ -282,7 +282,7 @@ Interview & Male & 3 & 32 & 9.4\% \\
 \end{tabular}
 \end{table}
 
-Female speakers show slightly higher error rates in both tasks (28.7\% vs 25.0\% for reading; 14.3\% vs 9.4\% for interview). However, these differences are modest---the raw count disparity (23 vs 8) is largely explained by the dataset being approximately 70\% female.
+Female speakers show slightly higher error rates in both tasks (28.7\% vs 25.0\% for reading; 14.3\% vs 9.4\% for interview). However, these differences are modest---the raw count disparity (23 vs 8) is largely explained by the dataset being approximately 70\% female. This finding warrants further investigation but does not undermine the main results, since both genders show the same pattern of interview speech outperforming reading speech for depression detection.
 
 \subsection{Validation Checks}
 
@@ -294,30 +294,32 @@ Two checks confirm the results are not artefactual:
 
 \section{Visualisations}
 
-Figure \ref{fig:feature-importance} presents the feature importance distributions for both tasks, showing the top 20 features ranked by Gini importance.
+Figure \ref{fig:feature-importance} presents the feature importance distributions for both tasks. The visual contrast is striking: reading task features show a relatively even distribution, while interview task features exhibit a steep drop-off after the top few features. Spectral flux variability visually dominates the interview chart, reinforcing its role as the primary predictive feature for spontaneous speech.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth]{figures/advanced/feature_importance_comparison.png}
-    \caption{Top 10 features by Gini importance: Reading task (left) vs Interview task (right)}
+    \caption{Top 10 features by Gini importance: Reading task (left) vs Interview task (right). Note the steeper importance gradient for interview speech.}
     \label{fig:feature-importance}
 \end{figure}
 
-Figure \ref{fig:confusion-matrices} shows confusion matrix heatmaps for both tasks.
+Figure \ref{fig:confusion-matrices} shows confusion matrix heatmaps for both tasks. The reading task matrix shows moderate off-diagonal values (errors), while the interview task matrix is visually cleaner---darker diagonal cells and lighter off-diagonal cells---immediately communicating the improved classification performance.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.48\textwidth]{figures/advanced/reading_confusion_matrices.png}
     \includegraphics[width=0.48\textwidth]{figures/advanced/interview_confusion_matrices.png}
-    \caption{Confusion matrices: Reading task (left) and Interview task (right)}
+    \caption{Confusion matrices: Reading task (left) and Interview task (right). The interview task shows improved classification with fewer off-diagonal errors.}
     \label{fig:confusion-matrices}
 \end{figure}
+
+Figure \ref{fig:learning-curves} tracks training and cross-validation accuracy as training set size increases. Both tasks show the characteristic pattern of valid learning: training accuracy starts high and decreases slightly as training size grows, while validation accuracy increases and converges toward the training curve. The modest gap between curves at maximum training size ($\sim$5 percentage points) indicates appropriate generalisation without severe overfitting.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.48\textwidth]{figures/advanced/reading_learning_curve.png}
     \includegraphics[width=0.48\textwidth]{figures/advanced/interview_learning_curve.png}
-    \caption{Learning curves showing training and validation accuracy}
+    \caption{Learning curves showing convergence of training and validation accuracy, indicating no severe overfitting.}
     \label{fig:learning-curves}
 \end{figure}
 

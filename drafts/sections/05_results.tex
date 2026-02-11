@@ -6,7 +6,7 @@ This chapter presents the experimental results, including classification perform
 
 \subsection{Overall Results}
 
-Table \ref{tab:classification-results} summarises the classification performance for both speech tasks using 5-fold stratified cross-validation.
+Table \ref{tab:classification-results} summarises the classification performance for both speech tasks using 5-fold stratified cross-validation. The reported uncertainty ($\pm$) represents the standard deviation across the five cross-validation folds, reflecting variability in performance estimates.
 
 \begin{table}[h]
 \centering
@@ -25,9 +25,15 @@ Interview & Random Forest & \textbf{87.1\%} $\pm$ 4.8\% & \textbf{0.88} \\
 \end{tabular}
 \end{table}
 
-\subsubsection{Key Finding: Interview Outperforms Reading}
+For context, with approximately balanced classes (48\% HC, 52\% PT), chance-level accuracy is approximately 50\%. All classifiers substantially exceed this baseline, confirming that the acoustic features carry genuine discriminative information about depression status.
 
-The most striking result is the substantial performance difference between tasks. Interview speech yields approximately 15 percentage points higher accuracy than reading speech across both classifiers:
+\subsection{Comparison with Prior Work}
+
+These results compare favourably with Tao et al.'s published results on the same ANDROIDS corpus \cite{Tao2024}. Using deep learning approaches, they achieved 83.4\% accuracy on reading and 81.6\% on spontaneous speech. The present work achieves 87.1\% on interview speech using traditional machine learning---a 5.5 percentage point improvement over their spontaneous speech result, while maintaining full interpretability. This validates the argument that interpretable methods can be competitive with deep learning for this task.
+
+\subsection{Key Finding: Interview Outperforms Reading}
+
+The most striking result is the substantial performance gap between tasks. Interview speech yields approximately 15 percentage points higher accuracy than reading speech across both classifiers:
 
 \begin{itemize}
     \item \textbf{Reading task:} 71.5--72.3\% accuracy
@@ -36,19 +42,9 @@ The most striking result is the substantial performance difference between tasks
 
 This suggests that spontaneous speech contains richer markers of depression than controlled reading, likely because it captures a broader range of cognitive and emotional processes.
 
-\subsubsection{Classifier Comparison}
-
-Random Forest marginally outperformed SVM on both tasks:
-\begin{itemize}
-    \item Reading: RF 72.3\% vs SVM 71.5\% (+0.8\%)
-    \item Interview: RF 87.1\% vs SVM 82.0\% (+5.1\%)
-\end{itemize}
-
-The larger advantage on interview data may reflect Random Forest's ability to capture more complex feature interactions present in naturalistic speech.
-
 \subsection{Statistical Significance}
 
-To confirm that the performance difference between tasks is genuine and not due to random variation, a two-proportion z-test was conducted comparing the accuracy rates.
+To confirm that this performance difference is genuine and not due to random variation, a two-proportion z-test was conducted comparing the Random Forest accuracy rates across tasks.
 
 \begin{table}[h]
 \centering
@@ -60,16 +56,26 @@ To confirm that the performance difference between tasks is genuine and not due 
 \hline
 Reading accuracy & 72.3\% \\
 Interview accuracy & 87.1\% \\
-Difference & 14.8\% \\
+Difference & 14.8 percentage points \\
 Z-statistic & 2.774 \\
 P-value & 0.0055 \\
 \hline
 \end{tabular}
 \end{table}
 
-The p-value of 0.0055 is well below the conventional significance threshold of 0.05, indicating that \textbf{interview speech is statistically significantly better than reading speech for depression detection}. This result provides strong evidence that the observed difference reflects a genuine phenomenon rather than sampling variability.
+The p-value of 0.0055 is well below the conventional significance threshold of 0.05, indicating that \textbf{interview speech is statistically significantly better than reading speech for depression detection}.
 
-\subsection{Confusion Matrix Analysis}
+\subsection{Classifier Comparison}
+
+Random Forest marginally outperformed SVM on both tasks:
+\begin{itemize}
+    \item Reading: RF 72.3\% vs SVM 71.5\% (+0.8 percentage points)
+    \item Interview: RF 87.1\% vs SVM 82.0\% (+5.1 percentage points)
+\end{itemize}
+
+The consistency of the interview $>$ reading pattern across both classifiers suggests this finding is robust to algorithm choice rather than an artefact of a particular method.
+
+\section{Confusion Matrix Analysis}
 
 Confusion matrices provide detailed insight into classification errors. Tables \ref{tab:cm-reading} and \ref{tab:cm-interview} show the confusion matrices for Random Forest on each task.
 
@@ -114,10 +120,10 @@ Key observations:
 \begin{itemize}
     \item False Positives: 8 (15\% of healthy controls)
     \item False Negatives: 7 (11\% of patients)
-    \item Errors are more balanced and substantially fewer overall
+    \item Substantially improved error rates with more balanced errors
 \end{itemize}
 
-The interview task's confusion matrix demonstrates not only higher accuracy but also more balanced error types, which is clinically important—both false positives (unnecessary worry) and false negatives (missed cases) are minimised.
+The interview task confusion matrix demonstrates not only higher accuracy but also more balanced error types---both false positives and false negatives are low. This is clinically important: false positives cause unnecessary concern while false negatives mean missed cases.
 
 \subsection{Detailed Classification Metrics}
 
@@ -140,19 +146,13 @@ Interview & Depressed & 0.88 & 0.89 & 0.88 \\
 \end{tabular}
 \end{table}
 
-The interview task achieves substantially higher precision and recall for both classes, with particularly notable improvement in identifying healthy controls (recall increases from 67\% to 85\%).
-
-\subsection{Comparison with Literature}
-
-These results compare favourably with published work on the ANDROIDS corpus and similar datasets. Previous studies using comparable methods report accuracies ranging from 65--85\% depending on task and methodology. The 87.1\% accuracy achieved here on interview speech places this approach among the better-performing methods, while maintaining full interpretability through traditional machine learning.
-
 \section{Feature Importance Analysis}
 
-The primary research question concerns which acoustic features are most predictive of depression. This section presents feature importance results for both tasks.
+The primary research question concerns which acoustic features are most predictive of depression. This section presents feature importance results ranked by Gini importance from the Random Forest classifier. Permutation importance was also computed as a robustness check; the two measures showed broad agreement in identifying the most predictive features, increasing confidence in these rankings.
 
 \subsection{Reading Task Features}
 
-Table \ref{tab:reading-features} shows the top 10 features for the reading task, ranked by Gini importance from the Random Forest classifier.
+Table \ref{tab:reading-features} shows the top 10 features for the reading task.
 
 \begin{table}[h]
 \centering
@@ -176,15 +176,15 @@ Table \ref{tab:reading-features} shows the top 10 features for the reading task,
 \end{tabular}
 \end{table}
 
+Importance scores range from 0.050 (top feature) to 0.025 (10th feature), indicating a relatively gradual decline. The top three features account for approximately 13\% of total importance, suggesting predictive power is distributed across multiple features rather than concentrated in one or two.
+
 \subsubsection{Interpretation: Reading Task}
 
-The reading task is dominated by:
+\paragraph{Spectral Slope (slopeUV0-500)} The top feature measures spectral tilt in unvoiced regions (0--500 Hz). Flatter slopes indicate breathier, less energetic voice quality---consistent with reduced vocal effort in depression.
 
-\paragraph{Spectral Slope Features} The top-ranked feature (slopeUV0-500) measures the spectral tilt in unvoiced speech segments (0--500 Hz). Spectral slope reflects the relative energy distribution across frequencies, with flatter slopes indicating breathier or less energetic voice quality. This is consistent with the reduced vocal effort often observed in depression.
+\paragraph{MFCC1} The first mel-frequency cepstral coefficient captures overall spectral envelope shape. Both mean and variability appear in the top 10, suggesting depressed speech shows altered spectral characteristics.
 
-\paragraph{MFCC1 (First Mel-Frequency Cepstral Coefficient)} MFCC1 captures the overall spectral envelope shape, particularly energy distribution. Both the mean and variability of MFCC1 appear in the top 10, suggesting that depressed speech shows altered spectral characteristics.
-
-\paragraph{Temporal Features} Loudness peaks per second and voiced segment variability indicate rhythm and prosodic differences. Depressed speech often exhibits reduced prosodic variation and altered speech timing.
+\paragraph{Temporal Features} Loudness peaks per second and voiced segment variability reflect speech rhythm and prosodic patterns.
 
 \subsection{Interview Task Features}
 
@@ -212,34 +212,27 @@ Table \ref{tab:interview-features} shows the top 10 features for the interview t
 \end{tabular}
 \end{table}
 
+Importance scores show a steeper decline than the reading task: the top feature (0.069) is nearly 3.5 times more important than the 10th feature (0.020). This suggests that a smaller set of features dominates predictive power for spontaneous speech.
+
 \subsubsection{Interpretation: Interview Task}
 
-The interview task shows a distinctly different feature profile:
+\paragraph{Spectral Flux Variability} The most important feature measures frame-to-frame spectral change variability. Reduced variability indicates monotonous speech---a hallmark of depression-related flat affect.
 
-\paragraph{Spectral Flux Variability} The most important feature is the variability of spectral flux in voiced regions. Spectral flux measures frame-to-frame spectral change, and its variability reflects dynamic speech modulation. Reduced variability may indicate the monotonous speech characteristic of depression.
+\paragraph{Voice Quality Variability} The Hammarberg index and alpha ratio capture spectral balance related to breathiness and vocal strain. Notably, their \textit{variability} (standard deviation) rather than mean values drives predictions.
 
-\paragraph{Voice Quality Measures} The Hammarberg index and alpha ratio both appear prominently. These measure the balance between low and high frequency energy, reflecting voice quality characteristics like breathiness and vocal strain. The importance of their \textit{variability} suggests that dynamic changes in voice quality during speech are particularly informative.
+\paragraph{Pause Characteristics} Both mean and variability of unvoiced segment length rank highly. Unvoiced segments correspond to pauses and hesitations---clinically meaningful given the psychomotor retardation associated with depression.
 
-\paragraph{Pausing Behaviour} Both the mean and variability of unvoiced segment length feature prominently. Unvoiced segments correspond to pauses and hesitations. This is clinically meaningful: depression is associated with psychomotor retardation and altered speech timing, manifesting as longer and more variable pauses.
+\subsection{Key Insight: Variability Measures Dominate}
 
-\paragraph{Loudness Dynamics} The variability of loudness slopes (both rising and falling) indicates prosodic expression. Reduced loudness modulation is a recognised marker of flat affect in depression.
+A striking pattern emerges: for interview speech, 7 of the top 10 features are variability measures (standard deviations), while for reading speech, only 2 of the top 10 are variability measures. This aligns with clinical characterisations of depressed speech as ``flat'' or ``monotonous''---not necessarily different in average properties, but reduced in \textit{dynamic modulation}.
 
 \section{Task Comparison}
 
 \subsection{Feature Overlap}
 
-Comparing the top 10 features between tasks reveals limited overlap:
+Comparing the top 10 features between tasks reveals minimal overlap: exactly \textbf{one feature} (mfcc1V\_amean) appears in both lists. This suggests that different acoustic markers are salient depending on speech context---a finding with implications for clinical system design.
 
-\begin{itemize}
-    \item \textbf{Shared features:} mfcc1V (both mean and variability)
-    \item \textbf{Overlap:} Only 2-3 features appear in both top-10 lists
-\end{itemize}
-
-This suggests that different acoustic markers are salient depending on speech context.
-
-\subsection{Feature Categories by Task}
-
-Table \ref{tab:feature-categories-comparison} categorises the dominant features for each task.
+\subsection{Dominant Feature Categories by Task}
 
 \begin{table}[h]
 \centering
@@ -261,115 +254,93 @@ Prosodic & Loudness peaks & Loudness dynamics \\
 
 The task-specific feature profiles suggest different cognitive mechanisms are captured:
 
-\paragraph{Reading Task} Reading a scripted text primarily reveals \textit{voice production} characteristics (spectral slope, MFCC) and basic rhythm (loudness peaks). These may reflect the physiological and motor aspects of depression.
+\paragraph{Reading Task} Reading scripted text primarily reveals \textit{voice production} characteristics (spectral slope, MFCC) and basic rhythm. These may reflect the physiological and motor aspects of depression.
 
-\paragraph{Interview Task} Spontaneous speech reveals \textit{cognitive and affective} processes: variable pausing (cognitive load, word-finding), reduced vocal dynamics (flat affect), and voice quality changes (emotional expression). The interview task places greater demands on executive function, emotional regulation, and language production—all of which are impacted by depression.
+\paragraph{Interview Task} Spontaneous speech reveals \textit{cognitive and affective} processes---variable pausing (reflecting cognitive load and word-finding difficulty), reduced vocal dynamics (flat affect), and voice quality changes (emotional expression). The interview task places greater demands on executive function, emotional regulation, and language production---all impacted by depression.
 
 This explains the superior classification performance on interview speech: it captures a broader range of depression-related processes.
 
 \section{Error Analysis}
 
-Understanding which samples are misclassified provides insight into model limitations and potential confounding factors.
+\subsection{Misclassification by Gender}
 
-\subsection{Misclassification Patterns}
-
-Analysis of misclassified samples revealed a notable pattern related to gender:
+Analysis of misclassified samples revealed a pattern related to gender. To interpret this correctly, error \textit{rates} (not raw counts) must be considered given the gender imbalance in the dataset.
 
 \begin{table}[h]
 \centering
-\caption{Misclassification by gender}
+\caption{Misclassification rates by gender}
 \label{tab:error-gender}
-\begin{tabular}{lcc}
+\begin{tabular}{llccc}
 \hline
-\textbf{Task} & \textbf{Female Errors} & \textbf{Male Errors} \\
+\textbf{Task} & \textbf{Gender} & \textbf{Errors} & \textbf{Total} & \textbf{Error Rate} \\
 \hline
-Reading & 23 & 8 \\
-Interview & 12 & 3 \\
+Reading & Female & 23 & 80 & 28.7\% \\
+Reading & Male & 8 & 32 & 25.0\% \\
+Interview & Female & 12 & 84 & 14.3\% \\
+Interview & Male & 3 & 32 & 9.4\% \\
 \hline
 \end{tabular}
 \end{table}
 
-Female speakers were more frequently misclassified in both tasks. This could reflect:
+Female speakers show slightly higher error rates in both tasks (28.7\% vs 25.0\% for reading; 14.3\% vs 9.4\% for interview). However, these differences are modest---the raw count disparity (23 vs 8) is largely explained by the dataset being approximately 70\% female.
 
-\begin{enumerate}
-    \item \textbf{Sample imbalance:} Potential over-representation of one gender in the dataset
-    \item \textbf{Feature bias:} Acoustic features may capture depression differently across genders
-    \item \textbf{Expression differences:} Gender differences in how depression manifests in speech
-\end{enumerate}
+\subsection{Validation Checks}
 
-This finding suggests that future work should consider gender-specific models or features, and highlights a limitation of the current approach.
+Two checks confirm the results are not artefactual:
 
-\subsection{Age Patterns}
+\paragraph{No overfitting detected} Learning curves (Figure \ref{fig:learning-curves}) show training and validation scores converging, indicating the models generalise appropriately. Training accuracy reached approximately 92\% while validation accuracy stabilised around 87\% for the interview task.
 
-The mean age of misclassified samples (47.9 years for reading task) was similar to the overall dataset mean, suggesting age was not a significant confounding factor in classification errors.
-
-\section{Learning Curve Analysis}
-
-Learning curves assess whether the model would benefit from additional training data and whether overfitting is occurring.
-
-Figure \ref{fig:learning-curves} shows the learning curves for Random Forest on both tasks. Key observations:
-
-\begin{itemize}
-    \item \textbf{No severe overfitting:} Training and validation scores converge, indicating the model generalises well
-    \item \textbf{Potential for improvement:} The curves have not fully plateaued, suggesting additional data could improve performance
-    \item \textbf{Interview task learns faster:} The interview task achieves higher validation scores with the same amount of training data
-\end{itemize}
-
-\begin{figure}[h]
-    \centering
-    % \includegraphics[width=0.48\textwidth]{figures/advanced/reading_learning_curve.png}
-    % \includegraphics[width=0.48\textwidth]{figures/advanced/interview_learning_curve.png}
-    \caption{Learning curves showing training and cross-validation accuracy as a function of training set size: (a) Reading task, (b) Interview task}
-    \label{fig:learning-curves}
-\end{figure}
+\paragraph{Cross-method consistency} Both SVM and Random Forest produce the same pattern (interview $>$ reading), suggesting the finding is robust to algorithm choice.
 
 \section{Visualisations}
 
-Figure \ref{fig:feature-importance} shows the feature importance distributions for both tasks side by side.
+Figure \ref{fig:feature-importance} presents the feature importance distributions for both tasks, showing the top 20 features ranked by Gini importance.
 
 \begin{figure}[h]
     \centering
-    % \includegraphics[width=\textwidth]{figures/advanced/feature_importance_comparison.png}
+    \includegraphics[width=\textwidth]{figures/advanced/feature_importance_comparison.png}
     \caption{Top 10 features by Gini importance: Reading task (left) vs Interview task (right)}
     \label{fig:feature-importance}
 \end{figure}
 
-Figure \ref{fig:accuracy-comparison} presents the accuracy comparison across tasks and algorithms.
+Figure \ref{fig:confusion-matrices} shows confusion matrix heatmaps for both tasks.
 
 \begin{figure}[h]
     \centering
-    % \includegraphics[width=0.7\textwidth]{figures/advanced/accuracy_comparison.png}
-    \caption{Classification accuracy comparison by task and algorithm}
-    \label{fig:accuracy-comparison}
+    \includegraphics[width=0.48\textwidth]{figures/advanced/reading_confusion_matrices.png}
+    \includegraphics[width=0.48\textwidth]{figures/advanced/interview_confusion_matrices.png}
+    \caption{Confusion matrices: Reading task (left) and Interview task (right)}
+    \label{fig:confusion-matrices}
 \end{figure}
 
-The visualisations reveal:
-\begin{itemize}
-    \item Reading task importance is more evenly distributed across features
-    \item Interview task has a steeper importance gradient, with the top feature (spectral flux variability) substantially more important than subsequent features
-    \item The accuracy gap between tasks is consistent across both classifiers
-\end{itemize}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.48\textwidth]{figures/advanced/reading_learning_curve.png}
+    \includegraphics[width=0.48\textwidth]{figures/advanced/interview_learning_curve.png}
+    \caption{Learning curves showing training and validation accuracy}
+    \label{fig:learning-curves}
+\end{figure}
 
 \section{Summary of Findings}
 
 \begin{enumerate}
-    \item \textbf{Interview speech is significantly more informative:} 87.1\% accuracy vs 72.3\% for reading (p = 0.0055)
+    \item \textbf{Interview speech is significantly more informative:} 87.1\% vs 72.3\% accuracy (p = 0.0055), exceeding prior deep learning results on the same corpus
     
-    \item \textbf{Different features matter for each task:}
+    \item \textbf{Different features matter for each task:} Only 1 of 10 top features overlaps between tasks
     \begin{itemize}
         \item Reading: Spectral slope, MFCC, rhythm
         \item Interview: Spectral dynamics, pausing, voice quality variability
     \end{itemize}
     
-    \item \textbf{Variability measures are key for interview speech:} The most predictive interview features are \textit{standard deviations}, not means—consistent with ``flat'' depressed speech
+    \item \textbf{Variability measures are key for interview speech:} 7 of 10 top features are standard deviations, consistent with ``flat'' depressed speech
     
-    \item \textbf{Pausing behaviour is highly informative:} Unvoiced segment features rank prominently for interview speech, reflecting psychomotor retardation
+    \item \textbf{Pausing behaviour is highly informative:} Unvoiced segment features rank 3rd and 4th for interview speech
     
-    \item \textbf{Confusion matrices show balanced errors for interview:} Both false positives and false negatives are low
+    \item \textbf{Confusion matrices show balanced errors for interview:} Both false positives (8) and false negatives (7) are low
     
-    \item \textbf{Gender bias in misclassification:} Female speakers are more often misclassified, warranting further investigation
-    
-    \item \textbf{No overfitting detected:} Learning curves show good generalisation with potential for improvement with more data
+    \item \textbf{Gender shows modest effect on error rates:} Female speakers have slightly higher error rates, though the difference is small
 \end{enumerate}
 
-These findings directly address the research question and provide interpretable insights into how depression manifests in speech.
+\subsection{Limitations}
+
+Feature importance rankings identify \textit{which} features are predictive but do not establish whether differences between features are statistically significant. Future work could apply permutation tests or bootstrap confidence intervals to determine whether, for example, the top-ranked feature is significantly more important than the second-ranked feature. For present purposes, the consistency between Gini and permutation importance measures provides reasonable confidence in the top-ranked features.

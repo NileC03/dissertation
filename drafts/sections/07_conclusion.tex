@@ -2,75 +2,24 @@
 
 \section{Summary of Contributions}
 
-This dissertation investigated which acoustic features of speech are most predictive of depression, with particular focus on comparing read versus spontaneous speech modalities. Using the ANDROIDS corpus and interpretable machine learning methods, the study addressed the research question directly and yielded several key contributions:
+This dissertation asked a deceptively simple question: \textit{which acoustic features of speech are most predictive of depression, and how do they differ between read and spontaneous speech?} The answer, it turns out, is not a single list of features but a more interesting finding about the nature of depressed speech itself.
 
-\subsection{Research Question Answered}
+The most important result is that reading and interview tasks do not simply provide stronger or weaker versions of the same signal—they access qualitatively different information about depression. Of the top ten predictive features for each task, only one appears in both lists. Reading task classification relies on static spectral characteristics: spectral slopes, MFCCs, and mean voice quality measures. Interview task classification relies on dynamic modulation: variability in spectral flux, voice quality, and pause duration. This near-complete divergence suggests that depression affects spontaneous and constrained speech through partially distinct mechanisms.
 
-The research question asked: \textit{``Which acoustic features of speech are most predictive of depression, and how do they differ between read and spontaneous speech?''}
+This finding has immediate implications. The 15-percentage-point accuracy gap between interview and reading speech (87\% versus 72\%) is substantial—larger than improvements typically achieved through algorithmic refinements. Task selection, in other words, may matter more than classifier optimisation. Studies using only reading tasks may be missing markers that emerge only in spontaneous speech, and vice versa. The field's implicit assumption that depression produces a unified set of acoustic biomarkers, captured with varying fidelity by different tasks, appears to require refinement.
 
-The answer is nuanced and task-dependent:
+The dominance of variability measures for interview speech provides a second key insight. The most predictive features are not means but standard deviations: spectral flux variability, Hammarberg index variability, pause duration variability. This aligns with clinical descriptions of depressed speech as ``flat'' or ``monotonous,'' but offers a more precise characterisation. Depression does not simply shift the voice to a different register—it compresses the dynamic range of speech. Healthy speakers modulate their spectral characteristics, voice quality, and timing throughout a conversation; depressed speakers exhibit reduced variation. For screening system design, this suggests prioritising measures of change over time rather than summary statistics.
 
-\paragraph{For Reading Speech:}
-\begin{itemize}
-    \item Spectral slope features (particularly in the 0--500 Hz range)
-    \item First Mel-Frequency Cepstral Coefficient (MFCC1)
-    \item Loudness peaks per second
-    \item Voiced segment timing variability
-\end{itemize}
+A third contribution concerns methodology. The 87\% accuracy achieved by Random Forest on interview speech matches or exceeds results reported by studies using deep learning on comparable data, including work on the same ANDROIDS corpus using convolutional and recurrent neural networks. Yet traditional machine learning with domain-informed features preserves interpretability—we can identify which specific acoustic properties drive detection and explain them in clinically meaningful terms. For applications where trust and explainability matter, this is a significant advantage. The assumption that accuracy requires sacrificing interpretability does not hold here.
 
-\paragraph{For Interview Speech:}
-\begin{itemize}
-    \item Spectral flux variability
-    \item Voice quality measures (Hammarberg index, alpha ratio)
-    \item Pause characteristics (unvoiced segment duration and variability)
-    \item Loudness dynamics (rising and falling slopes)
-\end{itemize}
+\section{Concluding Remarks}
 
-The critical finding is that \textbf{variability measures dominate for spontaneous speech}, while \textbf{mean values are more important for reading tasks}.
+Beyond the specific findings, this work offers a broader lesson about research design in speech-based mental health assessment. The choice of speech elicitation task is not a methodological detail to be glossed over—it fundamentally shapes what can be discovered. A reading task and an interview task are not interchangeable ways of collecting ``speech data''; they are different windows onto different aspects of how depression manifests in vocal behaviour. Future work in this area should treat task design as a first-order research decision, not an afterthought.
 
-\subsection{Main Findings}
+The findings also suggest that interpretability and accuracy are less opposed than sometimes assumed. The eGeMAPS feature set was designed for clinical interpretability, not maximum predictive power. Yet it performs competitively with end-to-end learned representations. This may reflect the maturity of acoustic feature engineering in the speech sciences, or it may indicate that the signal-to-noise ratio in depression detection is high enough that carefully chosen features suffice. Either way, the result is encouraging for clinical applications where black-box predictions are insufficient.
 
-\begin{enumerate}
-    \item \textbf{Interview speech substantially outperforms reading speech} for depression detection (87\% vs 72\% accuracy), suggesting that spontaneous speech captures richer markers of depression.
-    
-    \item \textbf{Different acoustic features are predictive in different speech contexts}, indicating that task selection is a critical design decision for speech-based mental health assessment.
-    
-    \item \textbf{Interpretable methods achieve competitive performance} with published deep learning approaches while providing clinical insight into which speech characteristics are affected by depression.
-    
-    \item \textbf{Dynamic speech modulation is key}: the most predictive features for interview speech are variability measures, consistent with clinical descriptions of ``flat'' or ``monotonous'' depressed speech.
-    
-    \item \textbf{Pause behaviour is highly informative}, reflecting the psychomotor retardation and cognitive slowing associated with depression.
-\end{enumerate}
+The work has clear limitations. Most seriously, all findings derive from Italian speech; whether the specific features identified transfer to English, Mandarin, or other languages remains unknown. The sample size is modest, the corpus captures a single time point per participant, and the observed gender bias in classification errors raises equity concerns for deployed systems. These constraints are discussed fully in Chapter 6 and should temper generalisation until cross-linguistic and longitudinal validation is conducted.
 
-\subsection{Practical Implications}
+Looking forward, the most important next step is cross-corpus validation—testing whether the task effect and feature importance patterns replicate on datasets like DAIC-WOZ with different languages, populations, and recording conditions. If the finding that variability measures dominate for spontaneous speech holds across contexts, it would have substantial implications for how screening systems are designed. Longitudinal studies tracking speech markers over the course of treatment could establish whether these features are sensitive to clinical change, enabling their use for monitoring as well as detection.
 
-For developers of speech-based mental health tools:
-\begin{itemize}
-    \item \textbf{Elicit spontaneous speech} rather than scripted reading for maximum diagnostic value
-    \item \textbf{Prioritise variability features} when building detection models
-    \item \textbf{Consider pause analysis} as a computationally efficient and interpretable marker
-\end{itemize}
-
-For clinicians:
-\begin{itemize}
-    \item Speech characteristics may provide objective biomarkers complementing self-report
-    \item Reduced vocal dynamics and altered pausing are observable indicators worth clinical attention
-\end{itemize}
-
-\section{Limitations Acknowledged}
-
-This work has limitations that constrain generalisation:
-
-\begin{itemize}
-    \item The findings are derived from a single corpus (ANDROIDS) with Italian speakers; cross-linguistic and cross-cultural validation is needed
-    \item Sample size (228 recordings) is modest for machine learning
-    \item The study focused on binary classification; graded severity prediction remains for future work
-\end{itemize}
-
-\section{Final Remarks}
-
-Depression remains a significant public health challenge, with diagnosis relying heavily on subjective self-report and clinical observation. Speech-based assessment offers the promise of objective, non-invasive markers that could enable earlier detection and more frequent monitoring.
-
-This study demonstrates that such markers exist and can be identified using interpretable methods. The finding that spontaneous speech reveals richer depression signatures than reading tasks has immediate practical implications for system design. The identification of variability measures—particularly spectral dynamics, voice quality, and pausing—as key features provides clinically meaningful insights that could inform both automated systems and clinical practice.
-
-Future work should validate these findings across diverse populations and languages, explore integration with clinical workflows, and investigate whether speech markers can track treatment response over time. The ultimate goal is a future where speech analysis contributes to early, accurate, and accessible mental health assessment.
+Depression affects hundreds of millions of people worldwide, and diagnosis still relies heavily on subjective self-report and clinical observation. Speech-based assessment offers the possibility of objective, non-invasive markers that could enable earlier detection and more accessible monitoring—particularly through integration with telehealth platforms and smartphone applications. This study demonstrates that such markers exist, that they can be identified using interpretable methods, and that the choice of how speech is elicited fundamentally shapes what markers emerge. The path from laboratory finding to clinical tool remains long, but the foundation is sound: spontaneous speech, variability measures, and interpretable models provide a viable basis for speech-based depression assessment.

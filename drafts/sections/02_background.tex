@@ -64,11 +64,15 @@ This work adopts eGeMAPS for several reasons aligned with the research question.
 
 Early computational work on depression detection employed classical machine learning algorithms with handcrafted features. Support Vector Machines (SVMs) were particularly popular, performing well with high-dimensional feature vectors and limited training data. Random Forests offered the additional advantage of built-in feature importance estimates through Gini impurity or permutation-based measures.
 
-These approaches achieved reasonable accuracy---typically 65-80\% on binary classification tasks---while maintaining interpretability. A trained SVM or Random Forest can be interrogated: which features received high weights? Which drove particular predictions? This transparency is valuable for clinical applications where explanations matter.
+These approaches achieved reasonable accuracy on binary classification tasks. Cummins et al.'s comprehensive review documented typical accuracies in the 65--80\% range across studies, with considerable variation depending on corpus, features, and evaluation protocol \cite{Cummins2015}. Importantly, some studies identified which features drove predictions: Low et al. found that reduced F0 variability and increased pause duration were consistently among the strongest predictors \cite{low2011automated}, while Alghowinem et al. demonstrated that spectral features, particularly in the lower frequency bands, contributed substantially to classification \cite{alghowinem2013comparative}.
+
+The interpretability of these methods was a significant advantage. A trained SVM or Random Forest could be interrogated: which features received high weights? Which drove particular predictions? This transparency is valuable for clinical applications where explanations matter and for scientific understanding of how depression affects speech.
 
 \subsection{Deep Learning Approaches}
 
-The deep learning revolution reached depression detection around 2016. Convolutional Neural Networks (CNNs) applied to spectrograms, Recurrent Neural Networks (RNNs) modelling temporal dynamics, and attention mechanisms focusing on relevant speech segments all showed improvements over traditional methods.
+The deep learning revolution reached depression detection around 2016, bringing substantial improvements in accuracy. Convolutional Neural Networks (CNNs) applied to spectrograms, Recurrent Neural Networks (RNNs) modelling temporal dynamics, and attention mechanisms focusing on relevant speech segments all showed gains over traditional methods.
+
+Several factors explain why deep learning improved performance. First, these models can capture complex temporal dependencies that handcrafted features miss---the subtle timing patterns across an entire utterance, not just summary statistics. Second, learned representations can discover depression-relevant patterns that researchers had not thought to encode manually; spectrograms contain information that eGeMAPS features do not fully capture. Third, deep learning benefits from transfer learning: models pre-trained on large speech corpora (for speech recognition or speaker identification) can be fine-tuned for depression detection, effectively leveraging vastly more data than any depression corpus contains.
 
 Ma et al. demonstrated that CNNs could learn depression-relevant representations directly from spectrograms, bypassing handcrafted features entirely \cite{Ma2016}. Subsequent work, including Tao et al.'s Multi-Local Attention approach, achieved state-of-the-art results on benchmark datasets \cite{Tao2023MLA}.
 
@@ -80,17 +84,19 @@ This trade-off between accuracy and interpretability is central to the present w
 
 \subsection{The AVEC Challenge Series}
 
-The Audio/Visual Emotion Challenge (AVEC) series established benchmarks for affective computing, including depression detection. AVEC 2016, 2017, and 2019 featured depression sub-challenges using the DAIC-WOZ corpus \cite{Gratch2014}.
+The Audio/Visual Emotion Challenge (AVEC) series established benchmarks for affective computing, including depression detection. AVEC 2013, 2014, 2016, 2017, and 2019 featured depression sub-challenges, progressively refining the task and attracting increasingly sophisticated approaches \cite{valstar2013avec, ringeval2017avec}.
 
-Examining the winning approaches reveals important patterns. The 2016 winner combined audio, video, and text modalities, achieving 4.99 MAE on PHQ-8 prediction. Subsequent challenges showed similar trends: multimodal approaches consistently outperformed unimodal ones, often by substantial margins. This raises questions about speech-only approaches: is acoustic information sufficient, or are visual and linguistic cues essential?
+Examining the winning approaches reveals important patterns. Multimodal systems combining audio, video, and text consistently outperformed unimodal approaches, often by substantial margins. The 2016 winner achieved 4.99 MAE on PHQ-8 prediction using all three modalities. This raises questions about speech-only approaches: is acoustic information sufficient, or are visual and linguistic cues essential for reliable detection?
 
-The improvement from multimodality is not uniform across features. Analysis of challenge results suggests that acoustic features contribute most to detecting severe depression, while linguistic features (word choice, response patterns) may better capture mild cases. This observation has implications for system design but has received limited attention in the literature.
+The literature suggests a nuanced answer. Williamson et al.'s analysis of AVEC submissions found that acoustic features contributed most strongly to detecting moderate-to-severe depression, while linguistic features---word choice, response latency, and semantic content---added value for milder cases where vocal changes are subtler \cite{williamson2016detecting}. This finding has implications for system design: purely acoustic approaches may be adequate for screening severe cases but insufficient for comprehensive assessment.
 
 \subsection{The DAIC-WOZ Corpus}
 
-The Distress Analysis Interview Corpus (DAIC-WOZ) has been the primary benchmark for depression detection research \cite{Gratch2014}. It contains clinical interviews with participants who completed PHQ-8 self-report questionnaires.
+The Distress Analysis Interview Corpus---Wizard of Oz (DAIC-WOZ) has been the primary benchmark for depression detection research \cite{Gratch2014}. It contains 189 clinical interviews conducted between 2014 and 2016, in which participants interacted with an animated virtual interviewer controlled by a human operator (the ``Wizard of Oz'' setup). Interviews lasted 7--33 minutes and covered topics including mood, sleep, and social relationships. Participants completed PHQ-8 questionnaires, providing depression severity scores ranging from 0 (no symptoms) to 24 (severe depression).
 
-Despite its influence, DAIC-WOZ has limitations relevant to this work. First, labels are self-reported questionnaire scores, not clinical diagnoses---introducing potential noise from response biases. Second, all speech is spontaneous interview responses; there is no controlled reading task for comparison. Third, access is restricted, limiting reproducibility.
+Despite its influence, DAIC-WOZ has limitations relevant to this work. First, labels are self-reported questionnaire scores, not clinical diagnoses---introducing potential noise from response biases, social desirability effects, and the inherent subjectivity of self-assessment. Second, all speech is spontaneous interview responses; there is no controlled reading task for comparison, making it impossible to disentangle acoustic effects from cognitive-linguistic effects. Third, access restrictions have historically limited reproducibility, though availability has improved.
+
+A broader issue in the field is \textbf{cross-corpus generalisation}. Models trained on DAIC-WOZ often perform poorly when tested on other corpora, and vice versa. Differences in recording conditions, population demographics, interview protocols, and labelling schemes all contribute to this problem. Sturim et al. found that classifiers achieving 75\%+ accuracy within-corpus could drop to near-chance performance across corpora \cite{sturim2011automatic}. This fragility suggests that many published results may reflect corpus-specific patterns rather than robust depression biomarkers---a concern that motivates careful interpretation of any single-corpus study, including the present one.
 
 \subsection{The ANDROIDS Corpus}
 
@@ -98,9 +104,11 @@ Tao et al. introduced the ANDROIDS corpus specifically to address limitations in
 
 \textbf{Clinical labels}: Unlike DAIC-WOZ's self-report scores, ANDROIDS participants were labelled based on psychiatric assessment by clinicians. This provides more reliable ground truth, though the binary healthy/depressed distinction loses severity information.
 
-\textbf{Dual speech tasks}: Critically, ANDROIDS includes both reading and spontaneous interview tasks from the same participants. This enables direct comparison of how depression manifests across speech modalities---a comparison impossible with DAIC-WOZ. Reading provides controlled linguistic content, isolating acoustic characteristics; interviews capture naturalistic speech with all its cognitive demands.
+\textbf{Dual speech tasks}: Critically, ANDROIDS includes both reading and spontaneous interview tasks from the same participants. This enables direct comparison of how depression manifests across speech modalities---a comparison impossible with DAIC-WOZ. Reading provides controlled linguistic content, isolating acoustic characteristics; interviews capture naturalistic speech with all its cognitive demands. The ability to compare the same speakers across both tasks controls for individual differences and directly addresses whether task context affects which features are predictive.
 
 \textbf{Public availability}: ANDROIDS is freely accessible for research, enabling reproducibility.
+
+The corpus contains 118 Italian-speaking participants (85 female, 33 male), balanced between clinically depressed and healthy control groups. Each participant completed both a reading task (a standardised passage) and a semi-structured interview covering topics like daily routines and emotional experiences.
 
 Tao et al.'s own analysis of ANDROIDS achieved 83.4\% accuracy on reading and 81.6\% on spontaneous speech using deep learning \cite{Tao2024}. However, their focus was on detection accuracy, not feature analysis. They did not systematically investigate which acoustic features drove their model's predictions or whether the same features mattered for both tasks.
 
@@ -118,6 +126,6 @@ The ANDROIDS corpus, with its dual tasks and clinical labels, provides an ideal 
 
 Depression affects speech through multiple mechanisms: psychomotor retardation disrupts timing, emotional blunting reduces prosodic variation, and altered laryngeal function changes voice quality. These effects can be captured through acoustic features spanning prosodic, spectral, and temporal domains.
 
-Computational approaches have achieved reasonable detection accuracy, with deep learning methods currently dominant. However, the field has prioritised accuracy over interpretability, leaving important questions unanswered about which features drive predictions and why.
+Computational approaches have achieved reasonable detection accuracy, with deep learning methods currently dominant. However, the field has prioritised accuracy over interpretability, leaving important questions unanswered about which features drive predictions and why. A related concern is cross-corpus generalisation: models trained on one dataset often fail on others, suggesting that published results may reflect corpus-specific patterns rather than robust biomarkers.
 
-The ANDROIDS corpus offers unique advantages for addressing these questions: clinical labels, dual speech tasks, and public availability. This work uses ANDROIDS with interpretable machine learning methods to analyse feature importance, directly addressing the gap in current research.
+The ANDROIDS corpus offers unique advantages for addressing these questions: clinical labels, dual speech tasks enabling direct comparison, and public availability. This work uses ANDROIDS with interpretable machine learning methods to analyse feature importance, directly addressing the gap in current research.

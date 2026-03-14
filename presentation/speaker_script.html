@@ -1,0 +1,140 @@
+<html><head><style>
+@page{size:A4;margin:2.5cm}
+body{font-family:Helvetica,Arial,sans-serif;max-width:100%;line-height:1.6;font-size:13px;color:#333}
+h1{color:#004E7C;border-bottom:2px solid #004E7C;padding-bottom:8px;font-size:22px}
+h2{color:#0077B6;margin-top:28px;font-size:17px;page-break-after:avoid}
+h3{color:#495057}
+blockquote{border-left:4px solid #0077B6;margin:12px 0;padding:6px 14px;background:#f8f9fa}
+em{color:#666}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ddd;padding:6px 10px;text-align:left;font-size:12px}
+th{background:#004E7C;color:white}
+hr{border:none;border-top:1px solid #ddd;margin:20px 0}
+p{margin:6px 0}
+</style></head><body><h1>Presentation Speaker Script</h1>
+<p><strong>Duration:</strong> ~15 minutes (12-13 min talk + 2-3 min buffer)<br />
+<strong>Tip:</strong> Practice with a timer. Speak slower than feels natural — nerves speed you up.</p>
+<hr />
+<h2>Slide 1: Title (~30 seconds)</h2>
+<p><em>[Take a breath. Don't rush the opening.]</em></p>
+<p>"Good morning/afternoon everyone. My name is Nile, and my dissertation is titled 'Identifying Depression Through Speech' — specifically, a comparative analysis of acoustic features in read and spontaneous speech.</p>
+<p>The short version: I wanted to find out whether the <em>way</em> we collect speech changes what we can detect about depression — and it turns out, it really does."</p>
+<hr />
+<h2>Slide 2: Why This Matters (~2 minutes)</h2>
+<p>"So, why speech and depression?</p>
+<p>Depression affects over 280 million people worldwide. In the UK alone, 1 in 6 adults experience depression or anxiety in any given week. That's an enormous public health challenge.</p>
+<p>But here's the problem with how we currently diagnose it: it relies almost entirely on self-report — questionnaires, clinical interviews. And these are subjective. Studies have shown inter-rater reliability for depression subtypes can be as low as 0.28 kappa, which is barely above chance agreement.</p>
+<p>On top of that, many people simply don't have access to specialist care. There are waiting lists, stigma, geographic barriers.</p>
+<p>So the question becomes: is there a more objective, accessible way to screen for depression?</p>
+<p>And that's where speech comes in. Speech is something we produce naturally, every day. It can be recorded non-invasively, remotely — even over a phone call. No specialist equipment needed. And crucially, there's decades of clinical evidence showing that depression changes how people speak — slower tempo, flatter pitch, more pauses. The question is whether we can measure those changes reliably enough to be clinically useful."</p>
+<hr />
+<h2>Slide 3: The Research Gap (~1.5 minutes)</h2>
+<p>"Now, there <em>is</em> existing work in this area. Deep learning models have achieved over 80% accuracy at detecting depression from speech. Sounds impressive, right?</p>
+<p>The problem is they're black boxes. They tell you <em>that</em> someone might be depressed, but not <em>why</em>. Not which aspect of their voice gave it away. And if you're a clinician, that's not very helpful — you need to understand the signal, not just the prediction.</p>
+<p>There's also a second gap. Most studies use a single type of speech — either reading aloud or a clinical interview — but rarely both. No one has systematically compared whether the <em>type</em> of speech task changes which features are important.</p>
+<p>So my research question is: which acoustic features are most predictive of depression, and how do they differ between read and spontaneous speech?</p>
+<p>This is a question about <em>understanding</em>, not just accuracy."</p>
+<hr />
+<h2>Slide 4: Approach Overview (~2 minutes)</h2>
+<p>"Here's the pipeline.</p>
+<p><strong>Data</strong> — I used the ANDROIDS corpus. This is a dataset of 118 Italian speakers, each with a clinical psychiatric diagnosis — not self-report, actual clinical assessment. Crucially, the same participants performed <em>both</em> a reading task and a spontaneous interview task. That's what enables a direct, controlled comparison.</p>
+<p><strong>Features</strong> — I extracted 88 acoustic features using the eGeMAPS feature set. These are standardised, interpretable features covering prosody — things like pitch and loudness — spectral properties, voice quality, and timing. Each feature has a clear acoustic meaning, which is important because I wanted to be able to explain what the model is picking up on.</p>
+<p><strong>Models</strong> — I deliberately chose Support Vector Machines and Random Forests over deep learning. The goal was interpretability. I wanted to know <em>which</em> features matter, not just maximise a number on a leaderboard. Random Forests give you built-in feature importance rankings, which turned out to be the most interesting part of the whole project."</p>
+<hr />
+<h2>Slide 5: The Headline Result (~2 minutes)</h2>
+<p>"So here's the headline result.</p>
+<p>When classifying depression from reading speech, the best model achieved 72.3% accuracy. Not bad, but not clinically useful on its own.</p>
+<p>From interview speech — same participants, same features, same model — <strong>87.1% accuracy</strong>.</p>
+<p>That's a 15 percentage point improvement, and it's statistically significant with a p-value of 0.0055. This wasn't a fluke — it was consistent across all five cross-validation folds.</p>
+<p>And here's what's particularly noteworthy: that 87.1% actually <em>beats</em> the best reported deep learning result on the same corpus, which was 81.6%. So an interpretable model, with handcrafted features, outperformed a black-box neural network.</p>
+<p>That tells us something important: for this task, the right <em>features</em> matter more than the model complexity."</p>
+<hr />
+<h2>Slide 6: Feature Divergence (~1.5 minutes)</h2>
+<p>"But the accuracy gap isn't even the most interesting finding. This is.</p>
+<p>When I looked at the top 10 most important features for each task, only <em>one</em> feature appeared in both lists. One out of ten.</p>
+<p>Reading speech relies on spectral slopes and MFCCs — these are essentially static properties of the voice signal. They tell you about the overall <em>quality</em> of the voice.</p>
+<p>Interview speech relies on variability measures and temporal dynamics. These capture how the voice <em>changes over time</em>.</p>
+<p>So it's not just that interview gives you better accuracy — it's giving you access to <em>qualitatively different information</em>. The two tasks are measuring different aspects of how depression manifests in speech. That has real implications for how we design screening tools."</p>
+<hr />
+<h2>Slide 7: The Variability Finding (~1.5 minutes)</h2>
+<p>"Let me drill into this because I think it's the most important contribution.</p>
+<p>For interview speech, 7 of the top 10 features are variability measures. The top three are spectral flux variability, Hammarberg index variability, and pause duration variability.</p>
+<p>For reading, only 2 of 10 are variability measures.</p>
+<p>What does this mean clinically? Clinicians have long described depressed speech as 'flat' or 'monotonous'. What the data is showing is that this flatness isn't just about pitch being lower — it's about the <em>dynamic range being compressed</em>. Depressed speakers don't modulate their voice as much over time. Their spectral flux doesn't vary as much. Their pauses are more uniform. Their voice quality stays more constant.</p>
+<p>And you can only see this in spontaneous speech, because reading imposes its own rhythm through punctuation and sentence structure. The variability that depression suppresses is the <em>natural</em> modulation of unscripted conversation."</p>
+<hr />
+<h2>Slide 8: Why Interview Works Better (~1.5 minutes)</h2>
+<p>"So why does interview speech capture these markers better? The clinical literature points to three mechanisms.</p>
+<p>First, <strong>cognitive load</strong>. Spontaneous speech requires real-time planning — you're retrieving words, constructing sentences, monitoring what you're saying. Depression impairs executive function, and that manifests as hesitations, longer pauses, reduced fluency. Reading bypasses most of this because the content is provided for you.</p>
+<p>Second, <strong>emotional engagement</strong>. Clinical interviews ask about mood, relationships, daily functioning — emotionally loaded topics. Depression specifically alters emotional expression, but you can only see that when emotions are actually being engaged. Reading a neutral passage doesn't trigger this.</p>
+<p>Third, <strong>prosodic freedom</strong>. When you read aloud, your intonation is partly determined by punctuation — you go up at a question mark, you pause at a full stop. Conversation gives you full freedom over your prosody, and that freedom is exactly what depression compresses.</p>
+<p>Interview speech captures all three channels. Reading suppresses them. That's why the gap is 15 percentage points."</p>
+<hr />
+<h2>Slide 9: Implications (~1 minute)</h2>
+<p>"So what does this mean in practice?</p>
+<p>For clinicians: task selection matters more than algorithm choice. If you're building a screening tool, use spontaneous speech, and measure <em>variability</em> — not just average pitch or average loudness.</p>
+<p>For researchers: be careful about generalising feature importance across speech tasks. Saying 'MFCCs are the best features for depression detection' might only be true for reading speech. Single-task studies may be missing important markers entirely.</p>
+<p>For system design: if you're building an app or a telehealth tool, elicit spontaneous speech. Ask open-ended questions. And prioritise temporal dynamics in your feature engineering."</p>
+<hr />
+<h2>Slide 10: Limitations (~1 minute)</h2>
+<p>"I want to be upfront about the limitations.</p>
+<p>The most serious one: this is Italian speech only. The ANDROIDS corpus was the only publicly available dataset where the same speakers performed both tasks with clinical diagnoses. Whether these features transfer to English or other languages is an open question — prosodic patterns can be language-dependent.</p>
+<p>The sample size is modest — 118 speakers. That said, the results were statistically significant and stable across cross-validation folds.</p>
+<p>On the moderate side: we only had binary labels — depressed or not — so we can't say anything about severity. And the gender split was 72% female, with women being misclassified slightly more often, which suggests there may be gender-specific patterns worth investigating.</p>
+<p>The key takeaway: cross-corpus validation across languages and populations is essential before any of this could be used clinically."</p>
+<hr />
+<h2>Slide 11: Conclusion (~1 minute)</h2>
+<p>"So to wrap up.</p>
+<p>The core finding is this: spontaneous speech captures depression markers that reading misses — specifically, the reduced dynamic modulation that clinicians call 'flat affect.'</p>
+<p>Four contributions. One: we quantified the task effect — 15 percentage points, statistically significant. Two: we showed that feature importance is task-specific, with only one feature in common between the top ten lists. Three: we demonstrated that interpretable methods can match or exceed deep learning accuracy. And four: we identified variability as the dominant signal in spontaneous speech — 7 of the top 10 features.</p>
+<p>Thank you."</p>
+<hr />
+<h2>Slide 12: Questions</h2>
+<p><em>[Deep breath. You know this material better than anyone in the room.]</em></p>
+<p><strong>If you need a moment to think:</strong> "That's a great question — let me think about that for a second."</p>
+<p><strong>Key numbers to keep in your head:</strong>
+- 87.1% vs 72.3% (p = 0.0055)
+- 1/10 feature overlap
+- 7/10 variability measures for interview
+- 118 speakers, 88 features, eGeMAPS
+- Beats prior DL at 81.6%</p>
+<hr />
+<h2>Total Timing Guide</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Slides</th>
+<th>Target Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup</td>
+<td>1-3</td>
+<td>~4 minutes</td>
+</tr>
+<tr>
+<td>Results</td>
+<td>4-7</td>
+<td>~7 minutes</td>
+</tr>
+<tr>
+<td>Interpretation</td>
+<td>8-10</td>
+<td>~3.5 minutes</td>
+</tr>
+<tr>
+<td>Wrap-up</td>
+<td>11-12</td>
+<td>~1.5 minutes</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>~15 minutes</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>Script created: March 14, 2026</em></p></body></html>

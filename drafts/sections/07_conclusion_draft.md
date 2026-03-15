@@ -23,16 +23,3 @@ The work has clear limitations. Most seriously, all findings derive from Italian
 Looking forward, the most important next step is cross-corpus validation—testing whether the task effect and feature importance patterns replicate on datasets like DAIC-WOZ with different languages, populations, and recording conditions. If the finding that variability measures dominate for spontaneous speech holds across contexts, it would have substantial implications for how screening systems are designed. Longitudinal studies tracking speech markers over the course of treatment could establish whether these features are sensitive to clinical change, enabling their use for monitoring as well as detection.
 
 Depression affects hundreds of millions of people worldwide, and diagnosis still relies heavily on subjective self-report and clinical observation. Speech-based assessment offers the possibility of objective, non-invasive markers that could enable earlier detection and more accessible monitoring—particularly through integration with telehealth platforms and smartphone applications. This study demonstrates that such markers exist, that they can be identified using interpretable methods, and that the choice of how speech is elicited fundamentally shapes what markers emerge. The path from laboratory finding to clinical tool requires further validation, but the foundation is sound: spontaneous speech, variability measures, and interpretable models provide a viable basis for speech-based depression assessment.
-
----
-
-**Estimated length:** 2.5-3 pages
-**Key changes from v1:**
-- Converted all bullet lists to confident prose
-- Cut redundant Limitations section (now one paragraph referencing Chapter 6)
-- Restructured to two sections: Summary of Contributions + Concluding Remarks
-- Lead with the meta-finding (task choice changes what you can detect)
-- Made "we beat deep learning" claim explicit
-- Added reflection on broader lessons (task design as first-order decision, interpretability vs accuracy)
-- Specific final sentence about this work's contribution
-- More confident, voiced tone throughout

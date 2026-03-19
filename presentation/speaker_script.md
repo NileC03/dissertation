@@ -94,7 +94,9 @@ For interview speech, 7 of the top 10 features are variability measures. The top
 
 For reading, only 2 of 10 are variability measures.
 
-What does this mean clinically? Clinicians have long described depressed speech as 'flat' or 'monotonous'. What the data is showing is that this flatness isn't just about pitch being lower — it's about the *dynamic range being compressed*. Depressed speakers don't modulate their voice as much over time. Their spectral flux doesn't vary as much. Their pauses are more uniform. Their voice quality stays more constant.
+What does this mean clinically? Clinicians have long described depressed speech as 'flat' or 'monotonous'. And for years, researchers interpreted that quite literally — they focused on measuring average pitch, assuming 'flat' meant 'lower.' A lot of early work in this field was built around that assumption.
+
+But our data tells a different story. The top features aren't averages at all — they're variability measures. Flatness isn't about the voice being lower. It's about the voice *moving less*. Depressed speakers don't modulate their voice as much over time. Their spectral flux doesn't vary as much. Their pauses are more uniform. Their voice quality stays more constant. The dynamic range is compressed across multiple dimensions simultaneously.
 
 And you can only see this in spontaneous speech, because reading imposes its own rhythm through punctuation and sentence structure. The variability that depression suppresses is the *natural* modulation of unscripted conversation."
 

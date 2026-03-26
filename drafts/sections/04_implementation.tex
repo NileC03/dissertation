@@ -6,7 +6,7 @@ This chapter describes how the methodology outlined in Chapter 3 was translated 
 
 The implementation used Python 3.11 with key libraries: openSMILE (v2.5.0) for acoustic feature extraction, scikit-learn (v1.3+) for machine learning, pandas for data manipulation, and matplotlib/seaborn for visualisation. All dependencies were isolated in a virtual environment to ensure reproducibility.
 
-A deliberate choice was made to use standard, well-maintained libraries rather than custom implementations. scikit-learn's implementations of SVM and Random Forest are extensively tested and widely used in published research, reducing the risk of implementation errors in core algorithms. Similarly, openSMILE is the de facto standard for eGeMAPS extraction, ensuring comparability with published results on the same feature set.
+A deliberate choice was made to use standard, well maintained libraries rather than custom implementations. scikit-learn's implementations of SVM and Random Forest are extensively tested and widely used in published research, reducing the risk of implementation errors in core algorithms. Similarly, openSMILE is the de facto standard for eGeMAPS extraction, ensuring comparability with published results on the same feature set.
 
 No GPU was required. Feature extraction for 228 recordings completed in approximately three minutes, and all classification experiments ran in under one minute on a standard personal computer. This low computational barrier reinforces the accessibility argument for traditional methods over deep learning.
 
@@ -14,17 +14,17 @@ No GPU was required. Feature extraction for 228 recordings completed in approxim
 
 \subsection{Corpus Structure and Metadata Extraction}
 
-The ANDROIDS corpus organises recordings hierarchically by task and condition: each speech task contains separate directories for healthy controls (HC) and patients (PT). This structure encodes the ground-truth label in the directory path, providing an initial verification checkpoint---the number of files in each directory should match published corpus statistics.
+The ANDROIDS corpus organises recordings hierarchically by task and condition. Each speech task contains separate directories for healthy controls (HC) and patients (PT). This structure encodes the ground truth label in the directory path, providing an initial verification checkpoint. The number of files in each directory should match published corpus statistics.
 
-Speaker metadata is encoded in filenames using the convention \texttt{nn\_XGmm\_t.wav}, where \texttt{nn} is speaker ID, \texttt{X} is condition (P/C), \texttt{G} is gender, \texttt{mm} is age, and \texttt{t} is education level. Parsing this format required handling potential inconsistencies: some filenames contained additional underscores or variant encodings. A defensive parsing approach was adopted, extracting fields positionally with fallback handling for unexpected formats.
+Speaker metadata is encoded in filenames using the convention \texttt{nn\_XGmm\_t.wav}, where \texttt{nn} is speaker ID, \texttt{X} is condition (P/C), \texttt{G} is gender, \texttt{mm} is age, and \texttt{t} is education level. Parsing this format required handling potential inconsistencies. Some filenames contained additional underscores or variant encodings. A defensive parsing approach was adopted, extracting fields positionally with fallback handling for unexpected formats.
 
 \subsection{Verification of Data Integrity}
 
-Several verification steps confirmed data integrity before analysis:
+Several verification steps confirmed data integrity before analysis.
 
 \paragraph{File count verification} The extraction script counted 112 reading recordings (54 HC, 58 PT) and 116 interview recordings (52 HC, 64 PT), matching the published corpus statistics. No files were corrupted or unreadable.
 
-\paragraph{Speaker overlap analysis} Of 70 unique speakers identified in the dataset, 67 appear in both tasks. This high overlap confirms that the corpus supports within-speaker comparison across tasks---a key requirement for the research design.
+\paragraph{Speaker overlap analysis} Of 70 unique speakers identified in the dataset, 67 appear in both tasks. This high overlap confirms that the corpus supports within-speaker comparison across tasks: a key requirement for the research design.
 
 \paragraph{Gender distribution} The dataset contains 164 female and 64 male recordings (72\% female). This imbalance is not immediately problematic for classification, but became relevant during error analysis, as discussed in Chapter 5.
 
@@ -34,9 +34,9 @@ Several verification steps confirmed data integrity before analysis:
 
 \subsection{openSMILE Configuration}
 
-The openSMILE Python bindings provide a high-level interface to the eGeMAPS configuration. The extraction was configured with two key settings: the eGeMAPSv02 feature set and the functionals feature level.
+The openSMILE Python bindings provide a high level interface to the eGeMAPS configuration. The extraction was configured with two key settings: the eGeMAPSv02 feature set and the functionals feature level.
 
-The ``functionals'' level was chosen deliberately over frame-level extraction. Frame-level output would produce variable-length sequences (one vector per 10ms frame), requiring either sequence modelling (LSTMs, which were rejected for interpretability reasons) or manual aggregation. The functionals level handles this aggregation internally, computing means, standard deviations, percentiles, and slope statistics according to the eGeMAPS specification. This ensures consistency with how the feature set was designed to be used.
+The ``functionals'' level was chosen deliberately over frame level extraction. Frame level output would produce variable length sequences (one vector per 10ms frame), requiring either sequence modelling (LSTMs, which were rejected for interpretability reasons) or manual aggregation. The functionals level handles this aggregation internally, computing means, standard deviations, percentiles, and slope statistics according to the eGeMAPS specification. This ensures consistency with how the feature set was designed to be used.
 
 \subsection{Output Structure}
 
@@ -48,11 +48,11 @@ Separate CSV files were also generated for each task, enabling independent analy
 
 \subsection{The Pipeline Pattern}
 
-For SVM classification, scikit-learn's \texttt{Pipeline} object was used to chain feature standardisation with the classifier. This is not merely a convenience---it ensures that standardisation parameters (mean and variance) are computed only on training data within each cross-validation fold, preventing information leakage from test samples into the scaling step.
+For SVM classification, scikit-learn's \texttt{Pipeline} object was used to chain feature standardisation with the classifier. This is not a convenience, it ensures that standardisation parameters (mean and variance) are computed only on training data within each cross-validation fold, preventing information leakage from test samples into the scaling step.
 
-Without a pipeline, a common error would be fitting the scaler on the full dataset before splitting into folds, subtly inflating accuracy by allowing test-set statistics to influence training-set transformation. The pipeline pattern makes this error structurally impossible.
+Without a pipeline, a common error would be fitting the scaler on the full dataset before splitting into folds, subtly inflating accuracy by allowing test set statistics to influence training-set transformation. The pipeline pattern makes this error structurally impossible.
 
-Random Forest does not require standardisation (tree-based methods are invariant to feature scales), so it was trained directly without a pipeline wrapper.
+Random Forest does not require standardisation (tree based methods are invariant to feature scales), so it was trained directly without a pipeline wrapper.
 
 \subsection{Cross-Validation Implementation}
 
@@ -64,9 +64,9 @@ For feature importance analysis, the Random Forest was additionally trained on t
 
 Two sanity checks were applied to classification outputs:
 
-\paragraph{Chance-level comparison} Both classifiers substantially exceeded chance accuracy (50\% for balanced binary classification), confirming that the features carry genuine discriminative information.
+\paragraph{Chance level comparison} Both classifiers substantially exceeded chance accuracy (50\% for balanced binary classification), confirming that the features carry genuine discriminative information.
 
-\paragraph{Cross-method consistency} SVM and Random Forest produced qualitatively similar accuracy patterns (interview $>$ reading), suggesting that the finding is robust to algorithm choice rather than an artefact of a particular classifier.
+\paragraph{Cross method consistency} SVM and Random Forest produced qualitatively similar accuracy patterns (interview $>$ reading), suggesting that the finding is robust to algorithm choice rather than an artefact of a particular classifier.
 
 \section{Feature Importance Analysis}
 
@@ -74,7 +74,7 @@ Two sanity checks were applied to classification outputs:
 
 Both Gini importance and permutation importance were computed, allowing cross-validation of importance rankings. If the two measures agree on which features are most important, confidence in those rankings increases; disagreement would warrant investigation.
 
-In practice, the top-ranked features showed reasonable agreement between measures, though exact rankings differed. Permutation importance was adopted as the primary measure, as discussed in the Methodology chapter, because it is not biased by feature cardinality.
+In practice, the top ranked features showed reasonable agreement between measures, though exact rankings differed. Permutation importance was adopted as the primary measure, as discussed in the Methodology chapter, because it is not biased by feature cardinality.
 
 \subsection{Consistency Verification}
 
@@ -94,4 +94,4 @@ Beyond the core classification and importance analysis, several additional analy
 
 \section{Summary}
 
-The implementation translated the methodology into a modular, verified system. Key implementation decisions---using pipelines to prevent data leakage, verifying data integrity before analysis, and cross-checking importance rankings across methods and seeds---reflect awareness that correct implementation is as important as correct methodology. All code is available in the project repository for inspection and reproduction.
+The implementation translated the methodology into a modular, verified system. Key implementation decisions, using pipelines to prevent data leakage, verifying data integrity before analysis, and cross-checking importance rankings across methods and seeds, reflect awareness that correct implementation is as important as correct methodology. All code is available in the project repository for inspection and reproduction.

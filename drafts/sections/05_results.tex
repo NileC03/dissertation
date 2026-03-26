@@ -27,6 +27,15 @@ Interview & Random Forest & \textbf{87.1\%} $\pm$ 4.8\% & \textbf{0.88} \\
 
 For context, with approximately balanced classes (48\% HC, 52\% PT), chance level accuracy is approximately 50\%. All classifiers substantially exceed this baseline, confirming that the acoustic features carry genuine discriminative information about depression status.
 
+Figure \ref{fig:accuracy-comparison} visualises the performance gap between tasks and classifiers. The interview task consistently outperforms reading regardless of algorithm choice.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/advanced/accuracy_comparison.png}
+    \caption{Classification accuracy by task and algorithm. Interview speech substantially outperforms reading for both SVM and Random Forest.}
+    \label{fig:accuracy-comparison}
+\end{figure}
+
 \subsection{Comparison with Prior Work}
 
 These results compare favourably with Tao et al.'s published results on the same ANDROIDS corpus \cite{Tao2024}. Using deep learning approaches, they achieved 83.4\% accuracy on reading and 81.6\% on spontaneous speech. The present work achieves 87.1\% on interview speech using traditional machine learning, a 5.5 percentage point improvement over their spontaneous speech result, while maintaining full interpretability. This validates the argument that interpretable methods can be competitive with deep learning for this task.
